@@ -1,0 +1,380 @@
+{
+  "notice": "Sample item rulebook. Every position below is illustrative and must be checked against the unit's scales, the DFPDS schedules and formation orders before use.",
+  "groups": [
+    { "id": "furniture", "label": "Furniture & furnishings", "generic": "furniture-office" },
+    { "id": "appliances", "label": "Appliances & electricals", "generic": "appliance-home" },
+    { "id": "kitchen", "label": "Kitchen & cookhouse", "generic": "kitchen" },
+    { "id": "it", "label": "Computers & software", "generic": "it-hardware" },
+    { "id": "office", "label": "Office supplies & printing", "generic": "stationery" },
+    { "id": "training", "label": "Training aids & books", "generic": "training-aids" },
+    { "id": "sports", "label": "Sports & PT", "generic": "sports-gym" },
+    { "id": "vehicles", "label": "Vehicles, spares & fuel", "generic": "vehicle-spares" },
+    { "id": "medical", "label": "Medical", "generic": "medical" },
+    { "id": "clothing", "label": "Clothing & camp stores", "generic": "clothing" },
+    { "id": "maintenance", "label": "Tools, cleaning & maintenance", "generic": "tools" },
+    { "id": "security", "label": "Security & controlled stores", "generic": "cctv" },
+    { "id": "works", "label": "Buildings & works", "generic": "building-repairs" },
+    { "id": "welfare", "label": "Welfare, mementos & events", "generic": "mementos" },
+    { "id": "services", "label": "Hiring & services", "generic": "hired-transport" }
+  ],
+  "items": [
+    {
+      "id": "furniture-office", "group": "furniture",
+      "name": "Office furniture",
+      "aliases": ["office furniture", "chair", "office chair", "revolving chair", "table", "office table", "desk", "almirah", "almira", "cupboard", "cabinet", "filing cabinet", "file cabinet", "rack", "shelf", "bookshelf", "book shelf", "bench", "stool", "workstation", "conference table", "computer table", "computer chair", "printer table", "furniture"],
+      "authorised": "Against the office furniture scale for the appointment and room",
+      "source": "local", "sourceText": "Locally procurable within scales; often listed on GeM",
+      "head": "Furniture (sample head)", "schedule": "Furniture (sample schedule item)",
+      "cautions": ["Check GeM first; most office furniture is listed there."],
+      "cites": ["PRAC-AUTH", "GFR-149", "PRAC-HEADS"]
+    },
+    {
+      "id": "furniture-living", "group": "furniture",
+      "name": "Sofas and lounge furniture",
+      "aliases": ["sofa", "sofa set", "sofaset", "couch", "settee", "diwan", "divan", "recliner", "lounge chair", "easy chair", "arm chair", "armchair", "centre table", "center table", "coffee table", "side table", "tea table", "dining table", "dining set", "tv stand", "tv unit", "tv cabinet"],
+      "authorised": "Only where the furniture scale for that room or appointment provides it; not usually scaled for troops' lines",
+      "source": "local", "sourceText": "Locally procurable where scaled; often listed on GeM",
+      "head": "Furniture (sample head)", "schedule": "Furniture (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Sofas for an officers' or JCOs' mess, a club or a unit institute are usually bought from that fund, not from public money."],
+      "cites": ["PRAC-AUTH", "PRAC-NONPUBLIC", "GFR-149"]
+    },
+    {
+      "id": "furniture-barrack", "group": "furniture",
+      "name": "Barrack and accommodation furniture",
+      "aliases": ["bed", "beds", "cot", "charpai", "bunk", "bunk bed", "mattress", "pillow", "locker", "steel locker", "wardrobe", "barrack furniture"],
+      "authorised": "Against the accommodation scale for the barrack or quarters",
+      "source": "local", "sourceText": "Locally procurable within scales; some items come through the station's furniture pool",
+      "head": "Furniture (sample head)", "schedule": "Furniture (sample schedule item)",
+      "cautions": ["Check with the station whether the furniture pool can issue it before buying."],
+      "cites": ["PRAC-AUTH", "PRAC-CENTRAL"]
+    },
+    {
+      "id": "furnishings", "group": "furniture",
+      "name": "Curtains, carpets and furnishings",
+      "aliases": ["curtain", "curtains", "carpet", "rug", "durrie", "dari", "blinds", "bedsheet", "bed sheet", "blanket", "quilt", "cushion", "cushion cover", "furnishing", "furnishings"],
+      "authorised": "Against accommodation scales; blankets and bedding for troops are usually scaled issues",
+      "source": "local", "sourceText": "Locally procurable within scales",
+      "head": "Furniture (sample head)", "schedule": "Furnishings (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Furnishings for a mess or institute are usually bought from that fund."],
+      "cites": ["PRAC-AUTH", "PRAC-NONPUBLIC"]
+    },
+    {
+      "id": "appliance-cooling", "group": "appliances",
+      "name": "Air conditioners, coolers, fans and heaters",
+      "aliases": ["ac", "a c", "air conditioner", "air conditioning", "aircon", "split ac", "window ac", "air cooler", "desert cooler", "cooler", "fan", "ceiling fan", "table fan", "pedestal fan", "exhaust fan", "heater", "room heater", "blower", "geyser", "water heater"],
+      "authorised": "Air conditioners only where the appointment or equipment room is authorised; fans and heaters against accommodation scales",
+      "source": "local-conditions", "sourceText": "Locally procurable within scales; installation may need the engineer services",
+      "head": "Electrical appliances (sample head)", "schedule": "Electrical appliances (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Fixed installations (split ACs, geysers) may be engineer services work, not a store purchase."],
+      "cites": ["PRAC-AUTH", "PRAC-SCOPE", "GFR-149"]
+    },
+    {
+      "id": "appliance-home", "group": "appliances",
+      "name": "Refrigerators, TVs and household appliances",
+      "aliases": ["fridge", "refrigerator", "tv", "t v", "television", "led tv", "smart tv", "microwave", "oven", "washing machine", "iron", "electric iron", "vacuum cleaner", "music system", "speaker", "speakers", "home theatre", "home theater", "projector screen", "appliance", "appliances"],
+      "authorised": "Only where a scale provides it, such as a TV for a recreation room",
+      "source": "local", "sourceText": "Locally procurable where scaled; usually listed on GeM",
+      "head": "Electrical appliances (sample head)", "schedule": "Electrical appliances (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Appliances for a mess, club or unit institute are usually bought from that fund."],
+      "cites": ["PRAC-AUTH", "PRAC-NONPUBLIC", "GFR-149"]
+    },
+    {
+      "id": "water-coolers", "group": "appliances",
+      "name": "Water purifiers and water coolers",
+      "aliases": ["water purifier", "purifier", "ro", "r o", "ro plant", "water cooler", "water dispenser", "water filter"],
+      "authorised": "Check accommodation and amenity scales",
+      "source": "local", "sourceText": "Locally procurable within scales",
+      "head": "Amenities (sample head)", "schedule": "Amenity stores (sample schedule item)",
+      "cautions": [],
+      "cites": ["PRAC-AUTH", "GFR-149"]
+    },
+    {
+      "id": "solar-gensets", "group": "appliances",
+      "name": "Solar lights, generators and inverters",
+      "aliases": ["solar", "solar light", "solar lights", "solar panel", "generator", "genset", "inverter", "ups battery", "battery bank", "street light", "lights", "led light", "tube light", "bulb", "bulbs"],
+      "authorised": "Check engineer stores scales",
+      "source": "local-conditions", "sourceText": "May be locally procurable; engineer stores may hold them",
+      "head": "Engineer stores (sample head)", "schedule": "Electrical stores (sample schedule item)",
+      "cautions": ["Check with engineer channels before buying; fixed wiring is engineer services work."],
+      "cites": ["PRAC-AUTH", "PRAC-CENTRAL"]
+    },
+    {
+      "id": "kitchen", "group": "kitchen",
+      "name": "Kitchen and cookhouse equipment",
+      "aliases": ["kitchen", "cookhouse", "langar", "utensil", "utensils", "cooking range", "gas stove", "stove", "burner", "pressure cooker", "cooker", "mixer", "grinder", "mixer grinder", "chapati machine", "roti machine", "roti maker", "dough kneader", "atta kneader", "kadhai", "tawa", "deep freezer", "freezer", "bain marie", "crockery", "cutlery", "plates", "dinner set", "tea set", "thermos", "flask"],
+      "authorised": "Cookhouse equipment against the cookhouse scale",
+      "source": "local", "sourceText": "Locally procurable within scales; often listed on GeM",
+      "head": "Cookhouse equipment (sample head)", "schedule": "Cookhouse and kitchen stores (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Crockery and kitchen items for an officers' or JCOs' mess are usually bought from mess funds."],
+      "cites": ["PRAC-AUTH", "PRAC-NONPUBLIC", "GFR-149"]
+    },
+    {
+      "id": "rations", "group": "kitchen",
+      "name": "Rations and fresh supplies",
+      "aliases": ["ration", "rations", "food", "fresh", "vegetables", "milk", "meat", "eggs", "dry ration", "groceries"],
+      "authorised": "By ration scale",
+      "source": "central", "sourceText": "Centrally supplied; not a unit purchase",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": ["Raise requirements through the supply chain, not by local purchase."],
+      "cites": ["PRAC-CENTRAL"]
+    },
+    {
+      "id": "it-hardware", "group": "it",
+      "name": "Computers, printers and IT peripherals",
+      "aliases": ["computer", "computers", "laptop", "desktop", "pc", "printer", "scanner", "photocopier", "photocopy machine", "xerox", "monitor", "ups", "mouse", "keyboard", "hard disk", "pen drive", "router", "it hardware", "tablet", "ipad", "projector cable"],
+      "authorised": "Against the unit's IT scale",
+      "source": "local-conditions", "sourceText": "Locally procurable with IT security conditions",
+      "head": "IT hardware (sample head)", "schedule": "IT equipment (sample schedule item)",
+      "cautions": ["IT security instructions may restrict makes, models and where devices can connect.", "Check GeM first."],
+      "cites": ["PRAC-AUTH", "GFR-149"]
+    },
+    {
+      "id": "software", "group": "it",
+      "name": "Software and online subscriptions",
+      "aliases": ["software", "subscription", "licence", "license", "app", "cloud", "antivirus", "anti virus", "ms office", "website", "internet connection", "broadband", "wifi"],
+      "authorised": "Subject to IT security policy",
+      "source": "restricted", "sourceText": "Restricted; needs IT security approval",
+      "head": "IT services (sample head)", "schedule": "IT services (sample schedule item)",
+      "cautions": ["Cloud services, online accounts and internet connections usually need explicit security clearance."],
+      "cites": ["PRAC-AUTH"]
+    },
+    {
+      "id": "stationery", "group": "office",
+      "name": "Office stationery and printer consumables",
+      "aliases": ["stationery", "stationary", "paper", "a4 paper", "printer paper", "printer ink", "printer cartridge", "printer toner", "toner", "cartridge", "ink", "files", "file cover", "register", "registers", "pen", "pens", "stapler", "office supplies", "consumables", "envelope", "envelopes"],
+      "authorised": "Covered by office contingency scales",
+      "source": "local", "sourceText": "Locally procurable; usually listed on GeM",
+      "head": "Office contingencies (sample head)", "schedule": "Stationery and office contingencies (sample schedule item)",
+      "cautions": ["Check GeM first; most stationery is listed there."],
+      "cites": ["GFR-149", "PRAC-HEADS"]
+    },
+    {
+      "id": "printing", "group": "office",
+      "name": "Printing, signboards and banners",
+      "aliases": ["printing", "print job", "banner", "banners", "flex", "signboard", "sign board", "nameplate", "name plate", "notice board", "board", "hoarding", "standee", "brochure"],
+      "authorised": "Covered by office contingencies where the need is official",
+      "source": "local", "sourceText": "Locally procurable",
+      "head": "Office contingencies (sample head)", "schedule": "Printing and publicity (sample schedule item)",
+      "cautions": [],
+      "cites": ["PRAC-HEADS"]
+    },
+    {
+      "id": "training-aids", "group": "training",
+      "name": "Training aids",
+      "aliases": ["training aid", "training aids", "projector", "smart board", "smartboard", "interactive board", "whiteboard", "white board", "simulator", "sand model", "model room", "training equipment", "map", "maps", "compass", "binocular", "binoculars", "target", "targets"],
+      "authorised": "Usually within training scales; check the unit's scale",
+      "source": "local", "sourceText": "Locally procurable",
+      "head": "Training (sample head)", "schedule": "Training aids and equipment (sample schedule item)",
+      "cautions": ["Simulators that connect to weapons or networks may need separate technical approval."],
+      "cites": ["PRAC-AUTH", "PRAC-HEADS", "DFPDS-LADDER"]
+    },
+    {
+      "id": "books", "group": "training",
+      "name": "Books, journals and library",
+      "aliases": ["book", "books", "library", "magazine", "magazines", "newspaper", "newspapers", "journal", "journals", "textbook", "dictionary"],
+      "authorised": "Against library and training grants",
+      "source": "local", "sourceText": "Locally procurable",
+      "head": "Training (sample head)", "schedule": "Books and periodicals (sample schedule item)",
+      "cautions": ["Newspapers for a mess or institute reading room are usually paid from that fund."],
+      "cites": ["PRAC-HEADS", "PRAC-NONPUBLIC"]
+    },
+    {
+      "id": "3d-printer", "group": "training",
+      "name": "3D printer for the workshop",
+      "aliases": ["3d printer", "3d printing", "3 d printer", "additive manufacturing"],
+      "authorised": "Not usually on scales",
+      "source": "local-conditions", "sourceText": "Needs special sanction as a non-scaled item",
+      "head": "Workshop or innovation (sample head)", "schedule": "Non-scaled items (sample schedule item)",
+      "cautions": ["Write the case around what it will produce and save."],
+      "cites": ["PRAC-AUTH", "DFPDS-LADDER"]
+    },
+    {
+      "id": "sports-gym", "group": "sports",
+      "name": "Sports and gym equipment",
+      "aliases": ["gym", "gym equipment", "sports", "sports equipment", "sports items", "treadmill", "weights", "dumbbell", "dumbbells", "barbell", "football", "volleyball", "basketball", "cricket kit", "cricket", "hockey", "badminton", "table tennis", "net", "fitness", "exercise cycle", "mat", "yoga mat", "obstacle"],
+      "authorised": "Within physical training scales; extra items may fall under welfare",
+      "source": "local", "sourceText": "Locally procurable",
+      "head": "Physical training and welfare (sample head)", "schedule": "Sports and PT stores (sample schedule item)",
+      "cautions": ["If bought from a regimental or welfare fund it is outside this tool's scope."],
+      "cites": ["PRAC-AUTH", "PRAC-HEADS", "PRAC-SCOPE"]
+    },
+    {
+      "id": "vehicle-spares", "group": "vehicles",
+      "name": "Vehicle spares",
+      "aliases": ["vehicle spare", "vehicle spares", "spares", "spare part", "spare parts", "tyre", "tyres", "tire", "tires", "battery", "batteries", "vehicle battery", "brake pad", "clutch plate", "headlight", "wiper"],
+      "authorised": "Against vehicle holding",
+      "source": "central", "sourceText": "Centrally provisioned; raise a demand. Local purchase only when the depot cannot supply and the need is urgent",
+      "head": "Vehicle maintenance (sample head)", "schedule": "Local purchase of spares (sample schedule item)",
+      "cautions": ["Keep the non-availability certificate from the depot on file."],
+      "cites": ["PRAC-CENTRAL"]
+    },
+    {
+      "id": "vehicles", "group": "vehicles",
+      "name": "Vehicles",
+      "aliases": ["vehicle", "car", "jeep", "gypsy", "bus", "truck", "motorcycle", "motor cycle", "bike", "scooter", "ambulance", "tractor", "suv"],
+      "authorised": "By equipment table only",
+      "source": "restricted", "sourceText": "Not a unit purchase; vehicles are provisioned centrally or by capital acquisition",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": ["To hire a vehicle for a task, ask about hiring of civil transport instead."],
+      "cites": ["PRAC-CENTRAL", "PRAC-SCOPE"]
+    },
+    {
+      "id": "fuel", "group": "vehicles",
+      "name": "Fuel and lubricants",
+      "aliases": ["fuel", "petrol", "diesel", "pol", "lubricant", "lubricants", "engine oil", "grease", "kerosene"],
+      "authorised": "By POL scale",
+      "source": "central", "sourceText": "Centrally supplied; local purchase only in narrow emergencies",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": [],
+      "cites": ["PRAC-CENTRAL"]
+    },
+    {
+      "id": "medical", "group": "medical",
+      "name": "Medical stores",
+      "aliases": ["medicine", "medicines", "medical", "first aid", "first aid kit", "drugs", "stretcher", "bandage", "bandages", "oxygen cylinder", "wheelchair", "bp machine", "thermometer"],
+      "authorised": "By medical scales",
+      "source": "central", "sourceText": "Through medical channels; local purchase only in an emergency",
+      "head": "Medical (sample head)", "schedule": "Emergency local purchase of medical stores (sample schedule item)",
+      "cautions": ["Route through the unit's medical officer."],
+      "cites": ["PRAC-CENTRAL"]
+    },
+    {
+      "id": "clothing", "group": "clothing",
+      "name": "Uniforms and clothing",
+      "aliases": ["uniform", "uniforms", "clothing", "boots", "shoes", "jacket", "jackets", "socks", "cap", "beret", "combat dress", "dress", "track suit", "tracksuit", "sweater", "jersey", "raincoat", "gloves"],
+      "authorised": "By clothing scale",
+      "source": "central", "sourceText": "Centrally provisioned through ordnance channels; not a unit purchase",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": ["Team kit bought from a regimental fund is outside this tool."],
+      "cites": ["PRAC-CENTRAL", "PRAC-SCOPE"]
+    },
+    {
+      "id": "camp-stores", "group": "clothing",
+      "name": "Tents and camp stores",
+      "aliases": ["tent", "tents", "tentage", "tarpaulin", "sleeping bag", "camp cot", "camping", "camp stores", "shamiana"],
+      "authorised": "By equipment table and camp stores scale",
+      "source": "central", "sourceText": "Centrally provisioned; hire locally only for events where allowed",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": ["For a one-off event, hiring a shamiana may be possible under hiring powers."],
+      "cites": ["PRAC-CENTRAL"]
+    },
+    {
+      "id": "tools", "group": "maintenance",
+      "name": "Tools and workshop equipment",
+      "aliases": ["tool", "tools", "toolkit", "tool kit", "drill", "drill machine", "spanner", "wrench", "welding machine", "air compressor", "compressor", "jack", "ladder", "multimeter", "hammer", "workshop equipment"],
+      "authorised": "Against workshop and equipment scales",
+      "source": "local", "sourceText": "Locally procurable within scales",
+      "head": "Workshop stores (sample head)", "schedule": "Tools and plant (sample schedule item)",
+      "cautions": [],
+      "cites": ["PRAC-AUTH", "GFR-149"]
+    },
+    {
+      "id": "cleaning", "group": "maintenance",
+      "name": "Cleaning and conservancy supplies",
+      "aliases": ["cleaning", "broom", "brooms", "mop", "mops", "phenyl", "phenol", "detergent", "soap", "sanitiser", "sanitizer", "dustbin", "dustbins", "garbage bag", "garbage bags", "toilet cleaner", "disinfectant", "conservancy"],
+      "authorised": "Covered by conservancy and contingency scales",
+      "source": "local", "sourceText": "Locally procurable; usually listed on GeM",
+      "head": "Conservancy (sample head)", "schedule": "Conservancy stores (sample schedule item)",
+      "cautions": [],
+      "cites": ["GFR-149", "PRAC-HEADS"]
+    },
+    {
+      "id": "cctv", "group": "security",
+      "name": "CCTV and security systems",
+      "aliases": ["cctv", "camera", "cameras", "surveillance", "security system", "access control", "biometric", "biometric machine", "metal detector", "dvr", "nvr"],
+      "authorised": "Subject to security instructions",
+      "source": "restricted", "sourceText": "Restricted; needs security approval",
+      "head": "Security (sample head)", "schedule": "Security equipment (sample schedule item)",
+      "cautions": ["Recorded footage and network connection need approval."],
+      "cites": ["PRAC-AUTH"]
+    },
+    {
+      "id": "arms-ammo", "group": "security",
+      "name": "Arms, ammunition and controlled stores",
+      "aliases": ["arms", "weapon", "weapons", "ammunition", "ammo", "rifle", "pistol", "explosive", "explosives", "controlled stores", "night vision", "radio set", "radio sets", "wireless set"],
+      "authorised": "By equipment table only",
+      "source": "restricted", "sourceText": "Centrally provisioned only; never bought locally",
+      "head": "Not a unit head", "schedule": "Not applicable",
+      "cautions": ["Not locally procurable under any circumstances in this tool."],
+      "cites": ["PRAC-CENTRAL", "PRAC-AUTH"]
+    },
+    {
+      "id": "drones", "group": "security",
+      "name": "Drones and unmanned aerial systems",
+      "aliases": ["drone", "drones", "uav", "uas", "quadcopter", "anti drone"],
+      "authorised": "Not usually on unit scales",
+      "source": "restricted", "sourceText": "Needs special authorisation; may be capital or emergency procurement",
+      "head": "Not a routine unit head", "schedule": "Special or emergency powers only (sample)",
+      "cautions": ["Security and airspace approvals apply.", "Do not plan a local purchase without formation guidance."],
+      "cites": ["PRAC-AUTH", "DFPDS-VERSION"]
+    },
+    {
+      "id": "building-repairs", "group": "works",
+      "name": "Buildings, repairs and construction",
+      "aliases": ["repair", "repairs", "building", "roof", "paint", "painting the building", "whitewash", "white wash", "plumbing", "construction", "renovation", "flooring", "tiles", "boundary wall", "shed", "toilet block", "road"],
+      "authorised": "Not a unit purchase",
+      "source": "out-of-scope", "sourceText": "Works done through the engineer services; outside this tool",
+      "head": "Works (outside scope)", "schedule": "Not applicable",
+      "cautions": ["Raise a works requirement through the station and engineer channels."],
+      "cites": ["PRAC-SCOPE"]
+    },
+    {
+      "id": "mementos", "group": "welfare",
+      "name": "Mementos, gifts and decorations",
+      "aliases": ["memento", "mementos", "gift", "gifts", "trophy", "trophies", "medal", "shield", "decoration", "decorations", "flowers", "bouquet", "photo frame", "souvenir"],
+      "authorised": "Not a scaled item",
+      "source": "local-conditions", "sourceText": "Usually from regimental funds, or under hospitality powers for official functions",
+      "head": "Hospitality or non-public (sample)", "schedule": "Hospitality (sample schedule item)",
+      "askWhere": true,
+      "cautions": ["Check which fund pays before using public money; gifts are tightly limited."],
+      "cites": ["PRAC-NONPUBLIC", "GFR-21"]
+    },
+    {
+      "id": "musical", "group": "welfare",
+      "name": "Band and musical instruments",
+      "aliases": ["musical instrument", "musical instruments", "instrument", "guitar", "drum", "drums", "harmonium", "trumpet", "bugle", "bagpipe", "tabla", "dholak", "musical keyboard"],
+      "authorised": "Band instruments by band scale; others not scaled",
+      "source": "local-conditions", "sourceText": "Band instruments through band channels; recreational instruments usually from regimental funds",
+      "head": "Welfare or non-public (sample)", "schedule": "Not applicable (sample)",
+      "askWhere": true,
+      "cautions": [],
+      "cites": ["PRAC-AUTH", "PRAC-NONPUBLIC"]
+    },
+    {
+      "id": "event-services", "group": "welfare",
+      "name": "Events and functions",
+      "aliases": ["event", "function", "party", "barakhana", "bara khana", "catering", "caterer", "sound system hire", "dj", "lighting hire", "celebration", "raising day"],
+      "authorised": "Only for official functions within hospitality powers",
+      "source": "local-conditions", "sourceText": "Official functions under hospitality powers; unit celebrations usually from regimental funds",
+      "head": "Hospitality or non-public (sample)", "schedule": "Hospitality (sample schedule item)",
+      "askWhere": true,
+      "cautions": [],
+      "cites": ["PRAC-NONPUBLIC", "GFR-21"]
+    },
+    {
+      "id": "hired-transport", "group": "services",
+      "name": "Hiring of civil transport",
+      "aliases": ["hire", "hiring", "hired transport", "hire a bus", "bus hire", "truck hire", "taxi", "cab", "civil hired transport", "cht", "transport"],
+      "authorised": "When service transport is not available",
+      "source": "local", "sourceText": "Hired locally",
+      "head": "Transport (sample head)", "schedule": "Hiring of civil transport (sample schedule item)",
+      "cautions": ["Record why service transport could not be used."],
+      "cites": ["DFPDS-LADDER", "PRAC-HEADS"]
+    },
+    {
+      "id": "services-amc", "group": "services",
+      "name": "Repairs and maintenance contracts (AMC)",
+      "aliases": ["amc", "annual maintenance", "maintenance contract", "service contract", "repair of ac", "ac repair", "ac servicing", "computer repair", "printer repair", "servicing", "pest control", "laundry", "housekeeping", "outsourcing"],
+      "authorised": "For equipment the unit holds",
+      "source": "local", "sourceText": "Contracted locally; often available on GeM as a service",
+      "head": "Maintenance services (sample head)", "schedule": "Repairs and services (sample schedule item)",
+      "cautions": ["Services follow the same value bands as goods; check GeM services first."],
+      "cites": ["GFR-149", "PRAC-HEADS"]
+    }
+  ]
+}

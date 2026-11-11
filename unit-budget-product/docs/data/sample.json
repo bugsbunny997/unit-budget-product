@@ -1,0 +1,128 @@
+{
+  "learn": [
+    {
+      "id": "L-CFA",
+      "title": "Who is the competent financial authority?",
+      "summary": "The person whose delegated powers cover the full value of the case.",
+      "text": "The competent financial authority (CFA) is the authority whose delegated ceiling for that schedule item covers the full value of the case. If the value is above the CO's ceiling, the case goes up, complete, to the next level. Sanctioning beyond your powers is one of the most common audit findings.",
+      "cites": ["DFPDS-LADDER", "DFPDS-VERSION"]
+    },
+    {
+      "id": "L-IFA",
+      "title": "What does IFA concurrence mean?",
+      "summary": "Some powers can only be used after the finance adviser agrees.",
+      "text": "For some schedule items and values, the CFA can only sanction after the Integrated Financial Adviser concurs. The schedule says which. Plan for it: the IFA will ask about necessity, the budget head, availability of funds, the procurement route and the basis of the price.",
+      "cites": ["DFPDS-IFA"]
+    },
+    {
+      "id": "L-THREE",
+      "title": "Allotment, commitment, expenditure",
+      "summary": "Why the balance in your register is usually wrong.",
+      "text": "Allotment is what you were given. Commitment is what you have promised through orders not yet paid. Expenditure is what accounts have booked. Units that track only payments think they have more money than they do until February.",
+      "cites": ["PRAC-THREE-NUMBERS"]
+    },
+    {
+      "id": "L-SPLIT",
+      "title": "What counts as splitting a demand?",
+      "summary": "Breaking one need into small buys to stay under a ceiling.",
+      "text": "If several purchases are really one requirement, such as the same item for different sub-units in the same month, they are judged at their combined value. Buying them separately to stay within a lower authority's powers is splitting, and it is not permitted.",
+      "cites": ["GFR-157"]
+    },
+    {
+      "id": "L-GEM",
+      "title": "When must I use GeM?",
+      "summary": "If the item is on GeM, start there.",
+      "text": "If the goods or services are available on the Government e-Marketplace, buy through GeM. The buying mode on GeM depends on the value. Record a reason if you buy outside GeM.",
+      "cites": ["GFR-149"]
+    },
+    {
+      "id": "L-MODES",
+      "title": "Which purchase mode fits my value?",
+      "summary": "No quotation, committee, limited tender, open tender.",
+      "text": "Under the revised GFR bands reported in 2025: up to ₹2 lakh without quotation; above ₹2 lakh to ₹25 lakh through a three-member purchase committee; up to ₹1 crore through limited tender; above ₹1 crore through an advertised tender. DPM 2025 may set defence-specific procedure on top of this.",
+      "cites": ["GFR-154", "GFR-155", "GFR-162", "GFR-161", "DPM-SCOPE"]
+    },
+    {
+      "id": "L-LAPSE",
+      "title": "Lapse and surrender",
+      "summary": "Unused money disappears on 31 March.",
+      "text": "Funds not spent by 31 March lapse. If you know you will not use money, surrender it early so someone else can. Large lapses are often read as 'the unit did not need it', and next year's allotment can shrink.",
+      "cites": ["GFR-SURRENDER", "GFR-RUSH"]
+    },
+    {
+      "id": "L-PAC",
+      "title": "Proprietary items and single tender",
+      "summary": "When only one maker exists.",
+      "text": "If only one firm makes what you need, you can use a single tender with a proprietary article certificate and a recorded reason. The price is then negotiated by a contract negotiation committee.",
+      "cites": ["GFR-166", "DPM-CNC"]
+    }
+  ],
+  "obligations": [
+    { "date": "2026-12-10", "title": "Quarterly expenditure return to formation", "note": "Illustrative date" },
+    { "date": "2027-01-15", "title": "Revised estimates input", "note": "Illustrative date" },
+    { "date": "2027-02-15", "title": "Last date to surrender foreseen savings", "note": "Illustrative date" },
+    { "date": "2027-03-15", "title": "Last bills to the paying office for this year", "note": "Illustrative date" }
+  ],
+  "precedents": [
+    { "unit": "Sample Unit A", "head": "Training (sample head)", "what": "Interactive projector and screen for the model room", "value": 320000, "route": "Purchase committee", "outcome": "Cleared audit", "lesson": "Wrote the case around hours of training delivered per week." },
+    { "unit": "Sample Unit B", "head": "Physical training and welfare (sample head)", "what": "Outdoor gym station for a remote post", "value": 180000, "route": "Without quotation, bought on GeM", "outcome": "Cleared audit", "lesson": "GeM listing made price reasonableness easy to show." },
+    { "unit": "Sample Unit C", "head": "Amenities (sample head)", "what": "Six RO water purifiers for barracks", "value": 210000, "route": "Purchase committee", "outcome": "Returned once", "lesson": "First case bought them as three separate orders; formation flagged it as splitting." },
+    { "unit": "Sample Unit D", "head": "IT hardware (sample head)", "what": "Two printers and a scanner for the orderly room", "value": 95000, "route": "GeM direct purchase", "outcome": "Cleared audit", "lesson": "Checked the approved-makes list before ordering." },
+    { "unit": "Sample Unit E", "head": "Workshop or innovation (sample head)", "what": "3D printer to make small plastic fittings", "value": 260000, "route": "Special sanction, then purchase committee", "outcome": "Sanctioned", "lesson": "Listed the parts it would replace and their depot lead times." }
+  ],
+  "funds": {
+    "notice": "Version 2 preview. Sample figures only; version 1 holds no real unit money.",
+    "asOf": "2026-11-11",
+    "heads": [
+      { "head": "Training (sample head)", "allotted": 1200000, "earmarked": 150000, "committed": 320000, "paid": 410000 },
+      { "head": "Physical training and welfare (sample head)", "allotted": 600000, "earmarked": 0, "committed": 60000, "paid": 120000 },
+      { "head": "Office contingencies (sample head)", "allotted": 450000, "earmarked": 20000, "committed": 40000, "paid": 310000 },
+      { "head": "IT hardware (sample head)", "allotted": 800000, "earmarked": 95000, "committed": 0, "paid": 180000 },
+      { "head": "Amenities (sample head)", "allotted": 500000, "earmarked": 0, "committed": 0, "paid": 60000 },
+      { "head": "Transport (sample head)", "allotted": 300000, "earmarked": 0, "committed": 45000, "paid": 240000 }
+    ],
+    "trace": [
+      { "date": "2026-10-02", "head": "Training (sample head)", "what": "Firing range targets", "stage": "Paid", "ref": "Bill 114 / CDA voucher 8812", "amount": 85000 },
+      { "date": "2026-10-19", "head": "Training (sample head)", "what": "Map reading kits", "stage": "Committed", "ref": "Supply order 41", "amount": 120000 },
+      { "date": "2026-10-28", "head": "Office contingencies (sample head)", "what": "Toner and paper (GeM)", "stage": "Paid", "ref": "GeM order 2026-..." , "amount": 38000 },
+      { "date": "2026-11-04", "head": "IT hardware (sample head)", "what": "Orderly room printers", "stage": "Earmarked", "ref": "PRN-2026-0003", "amount": 95000 },
+      { "date": "2026-11-06", "head": "Transport (sample head)", "what": "Civil buses for inter-unit sports", "stage": "Committed", "ref": "Hire order 12", "amount": 45000 }
+    ]
+  },
+  "seedIdeas": [
+    {
+      "id": "IDEA-001",
+      "title": "Shade and water point at the firing range",
+      "why": "Men wait two to three hours in the sun between details. A shade structure and a cooler would cut heat cases.",
+      "category": "Welfare",
+      "costBand": "₹1–2 lakh",
+      "by": "Anonymous",
+      "role": "JCO",
+      "status": "Open",
+      "createdAt": "2026-10-30T09:12:00+05:30"
+    },
+    {
+      "id": "IDEA-002",
+      "title": "Simulator for driver training",
+      "why": "New drivers get very little time on vehicles. A basic simulator would let them practise before going on the road.",
+      "category": "Training",
+      "costBand": "₹5–25 lakh",
+      "by": "Maj (Company Commander, sample)",
+      "role": "COY",
+      "status": "Open",
+      "createdAt": "2026-11-03T16:40:00+05:30"
+    },
+    {
+      "id": "IDEA-003",
+      "title": "Second printer for the orderly room",
+      "why": "One printer for all returns causes queues at month end.",
+      "category": "Office",
+      "costBand": "Under ₹1 lakh",
+      "by": "Accounts clerk (sample)",
+      "role": "CLERK",
+      "status": "Accepted",
+      "decision": { "by": "CO", "reason": "Accepted. QM to plan through GeM.", "at": "2026-11-04T10:05:00+05:30" },
+      "createdAt": "2026-10-21T11:00:00+05:30"
+    }
+  ]
+}

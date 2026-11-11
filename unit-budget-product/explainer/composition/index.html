@@ -1,0 +1,845 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <style>
+      /* Kosh explainer — palette and type taken from the app (public/styles.css, light appearance). */
+      :root {
+        --ground: #F2F2F7;
+        --surface: #FFFFFF;
+        --surface-2: #F7F7FA;
+        --ink: #1D1D1F;
+        --ink-2: #515154;
+        --ink-3: #6E6E73;
+        --sep: rgba(60, 60, 67, 0.16);
+        --accent: #4B5E2A;
+        --accent-tint: rgba(75, 94, 42, 0.10);
+        --accent-tint-2: rgba(75, 94, 42, 0.18);
+        --ok: #1F6B35;
+        --ok-tint: rgba(31, 107, 53, 0.11);
+        --warn: #8A5300;
+        --warn-tint: rgba(196, 128, 0, 0.14);
+        --danger: #B3261E;
+        --danger-tint: rgba(179, 38, 30, 0.09);
+        --paper: #FBF7EC;
+        --paper-edge: #E6DCC4;
+        --paper-ink: #2B2A26;
+        --paper-ink-2: #5A564B;
+        --stamp: #9C2B1E;
+        --font: "Inter", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--ground); }
+      body { font-family: var(--font); color: var(--ink); -webkit-font-smoothing: antialiased; }
+      #root { position: relative; width: 100%; height: 100%; }
+      #ground { position: absolute; inset: 0; background: var(--ground); }
+
+      .scene { position: absolute; inset: 0; }
+      .stage { position: absolute; inset: 0; padding: 120px 200px; }
+
+      /* persistent brand mark */
+      #mark { position: absolute; left: 110px; top: 60px; z-index: 50; }
+      #mark-inner { display: flex; align-items: center; gap: 14px; font-weight: 700; font-size: 28px; color: var(--ink); }
+      #mark-inner svg { width: 40px; height: 40px; color: var(--accent); }
+
+      /* type */
+      .eyebrow { font-size: 24px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+      .h1 { font-size: 92px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.05; }
+      .h2 { font-size: 60px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-top: 10px; }
+      .lede { font-size: 40px; font-weight: 400; color: var(--ink-2); letter-spacing: -0.01em; line-height: 1.3; }
+      .accent { color: var(--accent); }
+      .mono { font-family: var(--mono); }
+      .muted { color: var(--ink-3); }
+      .w { display: inline-block; }
+
+      /* surfaces */
+      .card { background: var(--surface); border-radius: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 18px 50px rgba(0,0,0,0.08); padding: 36px 42px; }
+      .chip { display: inline-flex; align-items: center; font-family: var(--mono); font-weight: 600; font-size: 25px; padding: 4px 14px; border-radius: 10px; background: var(--accent-tint); color: var(--accent); border: 2px solid var(--accent-tint-2); vertical-align: middle; margin-left: 10px; white-space: nowrap; }
+      .pill { display: inline-flex; align-items: center; gap: 10px; font-size: 25px; font-weight: 700; padding: 6px 16px; border-radius: 999px; background: rgba(118,118,128,0.14); color: var(--ink-2); white-space: nowrap; }
+      .pill::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: currentColor; }
+      .pill.ok { background: var(--ok-tint); color: var(--ok); }
+      .pill.warn { background: var(--warn-tint); color: var(--warn); }
+      .pill.danger { background: var(--danger-tint); color: var(--danger); }
+      .pill.accent { background: var(--accent-tint-2); color: var(--accent); }
+      .row { display: flex; align-items: center; gap: 18px; font-size: 30px; padding: 16px 0; border-top: 2px solid var(--sep); }
+      .row:first-child { border-top: 0; }
+      .row .k { width: 330px; flex: none; font-size: 26px; font-weight: 700; color: var(--ink-2); }
+      .row .v { flex: 1; }
+      .callout { border-radius: 18px; padding: 20px 26px; font-size: 30px; line-height: 1.35; background: var(--warn-tint); color: var(--ink); }
+      .callout.danger { background: var(--danger-tint); }
+      .callout.info { background: var(--accent-tint); }
+      .bubble-user { align-self: flex-end; background: var(--accent); color: #fff; font-size: 34px; padding: 18px 28px; border-radius: 30px 30px 8px 30px; }
+      .btn { display: inline-flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; padding: 14px 26px; border-radius: 16px; background: var(--surface); border: 2px solid rgba(60,60,67,0.28); color: var(--ink); }
+      .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .btn.plain { background: transparent; border-color: transparent; color: var(--accent); padding-left: 6px; }
+      .cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; z-index: 40; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3)); }
+
+      /* ---------- S1 gap ---------- */
+      #gap-lines { position: absolute; left: 200px; right: 200px; top: 300px; }
+      #gap-l1, #gap-l2 { font-size: 92px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.12; }
+      #gap-l2 { color: var(--ink-3); }
+      #gap-l3 { position: absolute; left: 200px; right: 200px; top: 300px; font-size: 80px; font-weight: 700; letter-spacing: -0.035em; line-height: 1.12; }
+      #gap-books { position: absolute; left: 200px; right: 200px; top: 600px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+      .book { background: var(--surface); border-radius: 26px; padding: 30px 34px; box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 14px 40px rgba(0,0,0,0.07); border-left: 12px solid var(--accent); }
+      .book b { display: block; font-family: var(--mono); font-size: 44px; font-weight: 700; color: var(--accent); }
+      .book span { display: block; font-size: 30px; color: var(--ink-2); margin-top: 6px; }
+
+      /* ---------- S2 meet ---------- */
+      #meet-word { position: absolute; left: 200px; top: 250px; display: flex; align-items: center; gap: 34px; }
+      #meet-word svg { width: 150px; height: 150px; color: var(--accent); }
+      #meet-name { font-size: 190px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
+      #meet-sub { font-size: 40px; color: var(--ink-3); margin-top: 8px; }
+      #meet-line { position: absolute; left: 200px; top: 560px; font-size: 64px; font-weight: 700; letter-spacing: -0.03em; }
+      #meet-roles-label { position: absolute; left: 200px; top: 700px; font-size: 34px; color: var(--ink-2); }
+      #meet-roles { position: absolute; left: 200px; right: 200px; top: 770px; display: flex; flex-wrap: wrap; gap: 16px; }
+      .role { font-size: 28px; font-weight: 600; padding: 12px 22px; border-radius: 999px; background: var(--surface); border: 2px solid var(--sep); box-shadow: 0 4px 14px rgba(0,0,0,0.05); }
+
+      /* ---------- shared scene header ---------- */
+      .head { position: absolute; left: 200px; top: 140px; right: 200px; }
+
+      /* ---------- S3 ask ---------- */
+      #ask-win { position: absolute; left: 200px; top: 280px; width: 1050px; height: 720px; background: var(--surface); border-radius: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 24px 70px rgba(0,0,0,0.10); overflow: hidden; }
+      #ask-top { display: flex; align-items: center; gap: 16px; padding: 20px 30px; border-bottom: 2px solid var(--sep); font-size: 24px; color: var(--ink-2); }
+      #ask-body { padding: 26px 30px; display: flex; flex-direction: column; gap: 18px; }
+      #ask-composer { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 24px; border-top: 2px solid var(--sep); display: flex; gap: 16px; align-items: center; background: var(--surface); }
+      #ask-input { flex: 1; height: 62px; border-radius: 16px; border: 2px solid var(--accent); box-shadow: 0 0 0 5px var(--accent-tint-2); font-size: 30px; padding: 0 20px; display: flex; align-items: center; overflow: hidden; white-space: nowrap; }
+      #ask-typed { display: inline-block; }
+      #ask-answer { background: var(--surface-2); border: 2px solid var(--sep); border-radius: 8px 30px 30px 30px; padding: 6px 28px; align-self: flex-start; width: 100%; }
+      #ask-answer .row { font-size: 28px; padding: 13px 0; }
+      #ask-answer .row .k { width: 250px; font-size: 25px; }
+      #ask-side { position: absolute; left: 1320px; top: 330px; width: 420px; }
+      #ask-cap { font-size: 46px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+      #ask-sheet { position: absolute; left: 1300px; top: 500px; width: 440px; padding: 28px 32px; border-radius: 26px; background: var(--surface); box-shadow: 0 30px 80px rgba(0,0,0,0.22); border: 2px solid var(--sep); z-index: 30; }
+      #ask-sheet .t { font-size: 28px; font-weight: 700; margin: 10px 0 8px; }
+      #ask-sheet p { font-size: 28px; line-height: 1.4; color: var(--ink-2); }
+      #ask-sheet .meta { font-size: 20px; color: var(--ink-3); margin-top: 12px; }
+
+      /* ---------- the chit (signature) ---------- */
+      .chit-wrap { position: absolute; filter: drop-shadow(0 18px 40px rgba(0,0,0,0.16)); }
+      .chit {
+        position: relative; background: var(--paper); color: var(--paper-ink); padding: 46px 46px 38px; width: 820px;
+        --tooth: 11px;
+        -webkit-mask:
+          radial-gradient(circle at 50% 0, transparent calc(var(--tooth) * 0.62), #000 calc(var(--tooth) * 0.66)) top / calc(var(--tooth) * 2) var(--tooth) repeat-x,
+          radial-gradient(circle at 50% 100%, transparent calc(var(--tooth) * 0.62), #000 calc(var(--tooth) * 0.66)) bottom / calc(var(--tooth) * 2) var(--tooth) repeat-x,
+          linear-gradient(#000, #000) center / 100% calc(100% - var(--tooth) * 2) no-repeat;
+        mask:
+          radial-gradient(circle at 50% 0, transparent calc(var(--tooth) * 0.62), #000 calc(var(--tooth) * 0.66)) top / calc(var(--tooth) * 2) var(--tooth) repeat-x,
+          radial-gradient(circle at 50% 100%, transparent calc(var(--tooth) * 0.62), #000 calc(var(--tooth) * 0.66)) bottom / calc(var(--tooth) * 2) var(--tooth) repeat-x,
+          linear-gradient(#000, #000) center / 100% calc(100% - var(--tooth) * 2) no-repeat;
+      }
+      .chit-head { display: flex; justify-content: space-between; border-bottom: 3px solid var(--paper-ink); padding-bottom: 18px; }
+      .chit-kind { font-size: 17px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--paper-ink-2); }
+      .chit-no { font-family: var(--mono); font-size: 40px; font-weight: 700; margin-top: 4px; }
+      .chit-val { text-align: right; }
+      .chit-val b { display: block; font-family: var(--mono); font-size: 36px; margin-top: 4px; }
+      .chit-item { font-size: 38px; font-weight: 700; margin: 22px 0 4px; }
+      .chit-sub { font-size: 26px; color: var(--paper-ink-2); }
+      .chit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 34px; margin: 22px 0 16px; }
+      .chit-grid div { border-top: 2px dashed var(--paper-edge); padding-top: 10px; }
+      .chit-grid dt { font-size: 16px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-ink-2); }
+      .chit-grid dd { font-size: 28px; margin-top: 4px; }
+      .chit-foot { border-top: 3px solid var(--paper-ink); padding-top: 14px; font-size: 19px; color: var(--paper-ink-2); }
+      .stamp { position: absolute; right: 40px; top: 150px; border: 5px double var(--stamp); color: var(--stamp); padding: 10px 20px; border-radius: 10px; font-weight: 900; font-size: 26px; letter-spacing: 0.12em; text-transform: uppercase; text-align: center; line-height: 1.2; background: rgba(251,247,236,0.7); }
+      .stamp small { display: block; font-size: 15px; letter-spacing: 0.06em; }
+
+      /* ---------- S4 note ---------- */
+      #note-chit { left: 200px; top: 290px; }
+      #note-panel { position: absolute; left: 1100px; top: 300px; width: 640px; }
+      #note-life { display: flex; gap: 6px; margin: 8px 0 26px; }
+      #note-life div { flex: 1; font-size: 20px; font-weight: 700; color: var(--ink-3); padding-top: 12px; border-top: 7px solid rgba(118,118,128,0.18); position: relative; }
+      #note-life div i { position: absolute; left: 0; right: 0; top: -7px; height: 7px; background: var(--accent); transform-origin: left; }
+      .check { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-top: 2px solid var(--sep); font-size: 28px; }
+      .check:first-child { border-top: 0; }
+      .box { width: 32px; height: 32px; border-radius: 8px; border: 3px solid rgba(60,60,67,0.35); flex: none; position: relative; margin-top: 2px; }
+      .box i { position: absolute; inset: -3px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; }
+      .box i::after { content: ""; width: 14px; height: 8px; border-left: 4px solid #fff; border-bottom: 4px solid #fff; transform: rotate(-45deg) translate(1px, -2px); }
+      .check .who { display: block; font-size: 22px; color: var(--ink-3); margin-top: 2px; }
+      #note-cap { position: absolute; left: 200px; top: 940px; font-size: 40px; font-weight: 700; letter-spacing: -0.02em; }
+
+      /* ---------- S5 chapter ---------- */
+      #ch-line { position: absolute; left: 200px; top: 400px; font-size: 140px; font-weight: 700; letter-spacing: -0.045em; line-height: 1; }
+      #ch-sub { position: absolute; left: 200px; top: 580px; font-size: 48px; color: var(--ink-3); }
+
+      /* ---------- ladder (E1, E4) ---------- */
+      .ladder { position: absolute; width: 760px; }
+      .rung { position: relative; height: 110px; margin-bottom: 18px; border-radius: 22px; background: var(--surface); border: 3px solid var(--sep); display: flex; align-items: center; justify-content: space-between; padding: 0 30px 0 34px; font-size: 30px; font-weight: 600; box-shadow: 0 6px 20px rgba(0,0,0,0.05); }
+      .rung .ceil { font-family: var(--mono); font-size: 28px; color: var(--ink-3); font-weight: 600; }
+      .rung .hl { position: absolute; inset: -3px; border-radius: 22px; border: 4px solid var(--accent); background: var(--accent-tint); }
+      .rung .lbl { position: relative; }
+      .marker { position: absolute; top: 0; left: -250px; width: 210px; height: 64px; border-radius: 999px; background: var(--ink); color: #fff; font-family: var(--mono); font-weight: 700; font-size: 26px; display: grid; place-items: center; }
+      .marker::after { content: ""; position: absolute; right: -16px; top: 22px; border: 10px solid transparent; border-left: 12px solid var(--ink); }
+
+      /* E1 */
+      #e1-q { position: absolute; left: 200px; top: 330px; width: 520px; }
+      #e1-q .bubble-user { display: inline-block; }
+      #e1-chips { position: absolute; left: 200px; top: 500px; width: 560px; display: grid; gap: 20px; }
+      #e1-ladder { left: 1060px; top: 300px; }
+      #e1-warn { position: absolute; left: 200px; top: 880px; width: 1520px; }
+
+      /* E2 */
+      #e2-cards { position: absolute; left: 200px; right: 200px; top: 330px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+      #e2-cards .card h3 { font-size: 40px; letter-spacing: -0.02em; margin-bottom: 16px; }
+      #e2-cards .card p { font-size: 28px; color: var(--ink-2); margin-top: 18px; line-height: 1.35; }
+      #e2-ban { position: absolute; left: 200px; right: 200px; top: 740px; }
+      #e2-note { position: absolute; left: 200px; top: 860px; font-size: 36px; font-weight: 600; color: var(--ink-2); }
+
+      /* E3 */
+      #e3-slips { position: absolute; left: 200px; top: 330px; width: 820px; height: 520px; }
+      .slip { position: absolute; left: 0; width: 820px; height: 140px; border-radius: 24px; background: var(--surface); border: 3px solid var(--sep); box-shadow: 0 8px 26px rgba(0,0,0,0.07); display: flex; align-items: center; justify-content: space-between; padding: 0 34px; font-size: 30px; font-weight: 600; }
+      .slip .amt { font-family: var(--mono); font-size: 32px; }
+      #e3-merged { position: absolute; left: 200px; top: 330px; width: 820px; }
+      #e3-merged .card { border: 4px solid var(--accent); }
+      #e3-merged .row .k { width: 200px; }
+      #e3-merged .t { display: flex; justify-content: space-between; font-size: 34px; font-weight: 700; }
+      #e3-rule { position: absolute; left: 1120px; top: 360px; width: 600px; }
+      #e3-rule .big { font-size: 50px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.15; }
+
+      /* E4 */
+      #e4-ladder { left: 470px; top: 340px; }
+      #e4-order { position: absolute; left: 1290px; top: 330px; width: 460px; border-left: 12px solid var(--accent); }
+      #e4-order .t { font-size: 28px; font-weight: 700; margin-top: 10px; line-height: 1.3; }
+      #e4-order p { font-size: 28px; color: var(--ink-2); margin-top: 10px; line-height: 1.35; }
+      #e4-strike { position: absolute; left: -6px; right: -6px; top: 50%; height: 4px; background: var(--danger); transform-origin: left; }
+      #e4-old { position: relative; }
+      #e4-line { position: absolute; left: 200px; top: 880px; font-size: 46px; font-weight: 700; letter-spacing: -0.02em; }
+
+      /* E5 */
+      #e5-cards { position: absolute; left: 200px; right: 200px; top: 330px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+      .toggle-row { display: flex; align-items: center; gap: 20px; font-size: 34px; font-weight: 700; padding-bottom: 22px; border-bottom: 2px solid var(--sep); }
+      .tg { width: 92px; height: 54px; border-radius: 999px; background: rgba(118,118,128,0.25); position: relative; flex: none; }
+      .tg .on { position: absolute; inset: 0; border-radius: 999px; background: var(--accent); }
+      .tg .knob { position: absolute; left: 5px; top: 5px; width: 44px; height: 44px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+      .res { font-size: 30px; padding-top: 22px; line-height: 1.5; }
+      .res div { padding: 6px 0; }
+
+      /* E6 */
+      #e6-chat { position: absolute; left: 200px; top: 320px; width: 860px; display: flex; flex-direction: column; gap: 22px; }
+      #e6-bot { background: var(--surface); border: 2px solid var(--sep); border-radius: 8px 30px 30px 30px; padding: 24px 30px; font-size: 32px; line-height: 1.35; box-shadow: 0 8px 26px rgba(0,0,0,0.06); }
+      #e6-queue { position: absolute; left: 1140px; top: 320px; width: 600px; }
+      #e6-queue h3 { font-size: 32px; margin-bottom: 16px; }
+      #e6-row { border-top: 2px solid var(--sep); padding-top: 18px; }
+      #e6-row .q { font-size: 28px; font-weight: 600; line-height: 1.3; }
+      #e6-row .s { font-size: 21px; color: var(--ink-3); margin-top: 8px; }
+      #e6-pills { position: relative; height: 44px; margin-top: 14px; }
+      #e6-pills .pill { position: absolute; left: 0; top: 0; }
+      #e6-cap { position: absolute; left: 200px; top: 900px; font-size: 46px; font-weight: 700; letter-spacing: -0.02em; }
+
+      /* E7 */
+      #e7-bad { position: absolute; left: 200px; top: 320px; width: 900px; }
+      #e7-bad .card { position: relative; }
+      #e7-bad .txt { font-size: 36px; margin-top: 18px; position: relative; display: block; width: max-content; }
+      #e7-cross { position: absolute; left: -4px; right: -4px; top: 52%; height: 5px; background: var(--danger); transform-origin: left; }
+      #e7-withheld { position: absolute; right: 36px; bottom: 24px; border: 5px double var(--danger); color: var(--danger); font-weight: 900; font-size: 28px; letter-spacing: 0.12em; text-transform: uppercase; padding: 8px 16px; border-radius: 10px; }
+      #e7-notice { position: absolute; left: 200px; top: 610px; width: 900px; font-size: 30px; color: var(--warn); font-weight: 600; line-height: 1.35; }
+      #e7-good { position: absolute; left: 1160px; top: 320px; width: 580px; }
+      #e7-good .row { font-size: 28px; }
+
+      /* Ideas */
+      #id-card { position: absolute; left: 200px; top: 320px; width: 980px; }
+      #id-card h3 { font-size: 42px; letter-spacing: -0.02em; margin-top: 14px; }
+      #id-card p { font-size: 28px; color: var(--ink-2); line-height: 1.4; margin-top: 12px; }
+      #id-card .meta { font-size: 23px; color: var(--ink-3); margin-top: 14px; }
+      #id-actions { display: flex; gap: 14px; margin-top: 24px; }
+      #id-status { position: absolute; right: 42px; top: 40px; height: 44px; width: 200px; }
+      #id-status .pill { position: absolute; right: 0; top: 0; }
+      #id-co { margin-top: 22px; }
+      #id-card { padding-bottom: 34px; }
+      #id-cap { position: absolute; left: 1260px; top: 360px; width: 480px; font-size: 54px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.12; }
+
+      /* Easy + end */
+      #ez-title { position: absolute; left: 200px; top: 200px; font-size: 84px; font-weight: 700; letter-spacing: -0.035em; }
+      #ez-steps { position: absolute; left: 200px; right: 200px; top: 380px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+      .step { background: var(--surface); border-radius: 28px; padding: 34px 36px; box-shadow: 0 2px 6px rgba(0,0,0,0.05), 0 16px 44px rgba(0,0,0,0.07); }
+      .step b { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 32px; font-weight: 700; }
+      .step div { font-size: 36px; font-weight: 700; letter-spacing: -0.02em; margin-top: 20px; line-height: 1.2; }
+      #ez-more { position: absolute; left: 200px; top: 720px; font-size: 44px; color: var(--ink-2); font-weight: 600; }
+      #end { position: absolute; inset: 0; background: var(--ground); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      #end-word { display: flex; align-items: center; gap: 30px; }
+      #end-word svg { width: 130px; height: 130px; color: var(--accent); }
+      #end-name { font-size: 170px; font-weight: 700; letter-spacing: -0.05em; line-height: 1; }
+      #end-line { font-size: 58px; font-weight: 700; letter-spacing: -0.03em; margin-top: 44px; }
+      #end-foot { font-size: 26px; color: var(--ink-3); margin-top: 30px; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="120" data-width="1920" data-height="1080">
+      <div id="ground"></div>
+
+      <!-- Persistent mark (from Meet Kosh until the end card) -->
+      <div id="mark" class="clip" data-start="10.5" data-duration="106" data-track-index="20" style="z-index: 50">
+        <div id="mark-inner">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M3 12h26M10 19h6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span>Kosh</span>
+        </div>
+      </div>
+
+      <!-- S1 The gap 0–10.5 -->
+      <section id="s1" class="clip scene" data-start="0" data-duration="10.5" data-track-index="0" style="z-index: 1">
+        <div class="stage" id="s1-stage">
+          <div id="gap-lines">
+            <div id="gap-l1" class="words">Every year, unit money lapses.</div>
+            <div id="gap-l2" class="words">Not because nobody needed it.</div>
+          </div>
+          <div id="gap-l3">Because nobody was sure <span class="accent">what the rules allow.</span></div>
+          <div id="gap-books">
+            <div class="book" id="gap-b1"><b>GFR</b><span>The rules of the game</span></div>
+            <div class="book" id="gap-b2"><b>DFPDS</b><span>Who signs, and up to how much</span></div>
+            <div class="book" id="gap-b3"><b>DPM</b><span>How to actually buy it</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- S2 Meet Kosh 10.5–19 -->
+      <section id="s2" class="clip scene" data-start="10.5" data-duration="8.5" data-track-index="0" style="z-index: 2">
+        <div class="stage" id="s2-stage">
+          <div id="meet-word">
+            <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M3 12h26M10 19h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+            <div><div id="meet-name">Kosh</div><div id="meet-sub">Unit budget guide</div></div>
+          </div>
+          <div id="meet-line" class="words">One question. <span class="accent">One cited answer.</span></div>
+          <div id="meet-roles-label">Built for everyone in the unit</div>
+          <div id="meet-roles">
+            <span class="role">Commanding Officer</span><span class="role">Second-in-Command</span><span class="role">Adjutant</span><span class="role">Quartermaster</span><span class="role">Company Commander</span><span class="role">Accounts Clerk</span><span class="role">JCO / Other Rank</span><span class="role">Rule Custodian</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- S3 Best case: Ask 19–34 -->
+      <section id="s3" class="clip scene" data-start="19" data-duration="15" data-track-index="0" style="z-index: 3">
+        <div class="stage" id="s3-stage">
+          <div class="head"><div class="eyebrow">The best case · 1 of 2</div><div class="h2">Ask in plain words.</div></div>
+          <div id="ask-win">
+            <div id="ask-top"><span class="pill">Rulebook mode</span><span>Answers come only from the rule library</span><span class="pill warn" style="margin-left:auto">Sample rule data</span></div>
+            <div id="ask-body">
+              <div class="bubble-user" id="ask-q">Can I buy a projector for ₹3 lakh?</div>
+              <div id="ask-answer">
+                <div class="row" id="ask-r1"><span class="k">Item</span><span class="v">Training aids</span><span class="chip">PRAC-AUTH</span></div>
+                <div class="row" id="ask-r2"><span class="k">Supplied</span><span class="v">Locally procurable</span><span class="chip">PRAC-CENTRAL</span></div>
+                <div class="row" id="ask-r3"><span class="k">Mode</span><span class="v">Local purchase committee</span><span class="chip" id="ask-chip">GFR-155</span></div>
+                <div class="row" id="ask-r4"><span class="k">Who sanctions</span><span class="v">Commanding Officer</span><span class="chip">DFPDS-LADDER</span></div>
+                <div class="row" id="ask-r5"><span class="k">IFA concurrence</span><span class="v">Not needed</span><span class="chip">DFPDS-IFA</span></div>
+              </div>
+            </div>
+            <div id="ask-composer"><div id="ask-input"><span id="ask-typed">Can I buy a projector for ₹3 lakh?</span></div><span class="btn primary" id="ask-send">Ask</span></div>
+          </div>
+          <div id="ask-side"><div id="ask-cap" class="words">Every line carries <span class="accent">its source.</span></div></div>
+          <div id="ask-sheet" data-hold>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="margin-left:0">GFR-155</span><span class="pill warn">Reported</span></div>
+            <div class="t">Purchase by a local purchase committee</div>
+            <p>Above ₹2 lakh, up to ₹25 lakh: a three-member committee buys it.</p>
+            <div class="meta">GFR 2017, as revised 05.06.2025 · Rule 155</div>
+          </div>
+          <svg class="cursor" id="ask-cursor" viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.6L9.5 21z" fill="#fff" stroke="#1D1D1F" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+      </section>
+
+      <!-- S4 Best case: the note 34–49 -->
+      <section id="s4" class="clip scene" data-start="34" data-duration="15" data-track-index="0" style="z-index: 4">
+        <div class="stage" id="s4-stage">
+          <div class="head"><div class="eyebrow">The best case · 2 of 2</div><div class="h2">Turn the answer into a numbered note.</div></div>
+          <div class="chit-wrap" id="note-chit">
+            <article class="chit">
+              <div class="chit-head">
+                <div><div class="chit-kind">Purchase readiness note</div><div class="chit-no">PRN-2026-0001</div></div>
+                <div class="chit-val"><div class="chit-kind">Indicative value</div><b>₹3,00,000</b></div>
+              </div>
+              <div class="stamp" id="note-stamp">Not a sanction<small>Guidance only</small></div>
+              <div class="chit-item">Training aids</div>
+              <div class="chit-sub">B Company model room</div>
+              <dl class="chit-grid">
+                <div><dt>Mode</dt><dd>Local purchase committee</dd></div>
+                <div><dt>Sanctioned by</dt><dd>Commanding Officer</dd></div>
+                <div><dt>IFA concurrence</dt><dd>Not needed</dd></div>
+                <div><dt>Funds</dt><dd>Not checked in version 1</dd></div>
+              </dl>
+              <div class="chit-foot">Sanction is given only by the competent financial authority.</div>
+            </article>
+          </div>
+          <div id="note-panel" class="card">
+            <div id="note-life">
+              <div>Registered<i id="nl1"></i></div><div>Checked<i id="nl2"></i></div><div>Sanctioned<i id="nl3"></i></div><div>Ordered<i id="nl4"></i></div><div>Received<i id="nl5"></i></div><div>Closed<i id="nl6"></i></div>
+            </div>
+            <div class="check"><span class="box"><i id="nb1"></i></span><span>Confirm the item is authorised<span class="who" id="nw1">Quartermaster · 11 Nov, 10:02</span></span></div>
+            <div class="check"><span class="box"><i id="nb2"></i></span><span>Check GeM and record it<span class="who" id="nw2">Quartermaster · 11 Nov, 10:05</span></span></div>
+            <div class="check"><span class="box"><i id="nb3"></i></span><span>Committee signs the joint certificate<span class="who" id="nw3">Second-in-Command · 12 Nov, 15:40</span></span></div>
+            <div class="check"><span class="box"><i id="nb4"></i></span><span>Obtain sanction from the CO<span class="who" id="nw4">Commanding Officer · 13 Nov, 09:15</span></span></div>
+          </div>
+          <div id="note-cap" class="words">Every step ticked, timed and <span class="accent">on record.</span></div>
+        </div>
+      </section>
+
+      <!-- S5 Chapter 49–52 -->
+      <section id="s5" class="clip scene" data-start="49" data-duration="3" data-track-index="0" style="z-index: 5">
+        <div class="stage" id="s5-stage">
+          <div id="ch-line">Now the <span class="accent">hard cases.</span></div>
+          <div id="ch-sub">Seven of them.</div>
+        </div>
+      </section>
+
+      <!-- E1 Above your powers 52–60.5 -->
+      <section id="e1" class="clip scene" data-start="52" data-duration="8.5" data-track-index="0" style="z-index: 6">
+        <div class="stage" id="e1-stage">
+          <div class="head"><div class="eyebrow">Edge case 1 of 7</div><div class="h2">It's above your powers.</div></div>
+          <div id="e1-q"><div class="bubble-user">Who sanctions a ₹30 lakh purchase?</div></div>
+          <div id="e1-chips">
+            <div class="card" id="e1-c1" style="padding:24px 30px;font-size:30px">Limited Tender Enquiry <span class="chip">GFR-162</span></div>
+            <div class="card" id="e1-c2" style="padding:24px 30px;font-size:30px">IFA concurrence <span class="pill warn" style="margin-left:10px">Needed</span> <span class="chip">DFPDS-IFA</span></div>
+          </div>
+          <div class="ladder" id="e1-ladder">
+            <div class="rung" id="e1-r4"><span class="lbl">GOC Corps</span><span class="ceil">₹3 crore</span></div>
+            <div class="rung" id="e1-r3"><i class="hl" id="e1-h3"></i><span class="lbl">GOC Division</span><span class="ceil">₹1 crore</span></div>
+            <div class="rung" id="e1-r2"><i class="hl" id="e1-h2"></i><span class="lbl">Brigade Commander</span><span class="ceil">₹25 lakh</span></div>
+            <div class="rung" id="e1-r1"><i class="hl" id="e1-h1"></i><span class="lbl">Commanding Officer</span><span class="ceil">₹5 lakh</span></div>
+            <div class="marker" id="e1-marker">₹30 lakh</div>
+            <div class="muted" style="font-size:22px;margin-top:-4px">Sample ceilings <span class="chip">DFPDS-LADDER</span></div>
+          </div>
+          <div class="callout" id="e1-warn" data-hold>Above the CO's ceiling: send the case up, complete, to <b>GOC Division</b>.</div>
+        </div>
+      </section>
+
+      <!-- E2 Not a local purchase 60.5–67.5 -->
+      <section id="e2" class="clip scene" data-start="60.5" data-duration="7" data-track-index="0" style="z-index: 7">
+        <div class="stage" id="e2-stage">
+          <div class="head"><div class="eyebrow">Edge case 2 of 7</div><div class="h2">It isn't a local purchase at all.</div></div>
+          <div id="e2-cards">
+            <div class="card" id="e2-c1"><h3>Vehicle spares</h3><span class="pill">Centrally supplied</span><p>Centrally provisioned; raise a demand. Local purchase only when the depot cannot supply and the need is urgent.</p></div>
+            <div class="card" id="e2-c2"><h3>CCTV and security systems</h3><span class="pill danger">Restricted</span><p>Restricted; needs security approval.</p></div>
+          </div>
+          <div class="callout danger" id="e2-ban">This isn't a normal local purchase, so no route is shown. <span class="chip">PRAC-CENTRAL</span></div>
+          <div id="e2-note">A purchase note can't be raised for it either.</div>
+        </div>
+      </section>
+
+      <!-- E3 Splitting 67.5–75.5 -->
+      <section id="e3" class="clip scene" data-start="67.5" data-duration="8" data-track-index="0" style="z-index: 8">
+        <div class="stage" id="e3-stage">
+          <div class="head"><div class="eyebrow">Edge case 3 of 7</div><div class="h2">One need, bought in pieces.</div></div>
+          <div id="e3-slips">
+            <div class="slip" id="e3-s1" style="top:0"><span>2 RO water purifiers</span><span class="amt">₹70,000</span></div>
+            <div class="slip" id="e3-s2" style="top:170px"><span>2 RO water purifiers</span><span class="amt">₹70,000</span></div>
+            <div class="slip" id="e3-s3" style="top:340px"><span>2 RO water purifiers</span><span class="amt">₹70,000</span></div>
+          </div>
+          <div id="e3-merged">
+            <div class="card">
+              <div class="t"><span>6 RO water purifiers</span><span class="mono">₹2,10,000</span></div>
+              <div class="row" style="margin-top:14px"><span class="k">Judged as</span><span class="v">Local purchase committee</span><span class="chip">GFR-155</span></div>
+            </div>
+          </div>
+          <div id="e3-rule" data-hold>
+            <div class="big words">Related needs are judged at their <span class="accent">combined value.</span></div>
+            <div style="font-size:28px;color:var(--ink-2);margin-top:22px">Splitting to stay under a limit is not permitted. <span class="chip">GFR-157</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- E4 Local order 75.5–84 -->
+      <section id="e4" class="clip scene" data-start="75.5" data-duration="8.5" data-track-index="0" style="z-index: 9">
+        <div class="stage" id="e4-stage">
+          <div class="head"><div class="eyebrow">Edge case 4 of 7</div><div class="h2">Your formation is stricter.</div></div>
+          <div class="ladder" id="e4-ladder">
+            <div class="rung" id="e4-r3"><span class="lbl">GOC Division</span><span class="ceil">₹1 crore</span></div>
+            <div class="rung" id="e4-r2"><i class="hl" id="e4-h2"></i><span class="lbl">Brigade Commander</span><span class="ceil">₹25 lakh</span></div>
+            <div class="rung" id="e4-r1"><i class="hl" id="e4-h1"></i><span class="lbl">Commanding Officer</span><span class="ceil"><span id="e4-old">₹5 lakh<i id="e4-strike"></i></span> <span id="e4-new" style="color:var(--danger)">₹3 lakh</span></span></div>
+            <div class="marker" id="e4-marker">₹3.5 lakh</div>
+          </div>
+          <div class="card" id="e4-order">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span class="chip" style="margin-left:0">LO-001</span><span class="pill accent">Local order</span></div>
+            <div class="t">Sample Bde order: CO local purchase limit</div>
+            <p>Commanding Officers may sanction local purchases up to ₹3 lakh; above that, cases come to Brigade HQ.</p>
+          </div>
+          <div id="e4-line" class="words">Local orders override, <span class="accent">and get cited.</span></div>
+        </div>
+      </section>
+
+      <!-- E5 One maker / GeM 84–90.5 -->
+      <section id="e5" class="clip scene" data-start="84" data-duration="6.5" data-track-index="0" style="z-index: 10">
+        <div class="stage" id="e5-stage">
+          <div class="head"><div class="eyebrow">Edge case 5 of 7</div><div class="h2">Only one maker, or already on GeM.</div></div>
+          <div id="e5-cards">
+            <div class="card">
+              <div class="toggle-row"><span class="tg"><i class="on" id="e5-on1"></i><i class="knob" id="e5-k1"></i></span>Only one maker</div>
+              <div class="res" id="e5-res1"><div>Single tender (proprietary item) <span class="chip">GFR-166</span></div><div>Price set by a negotiation committee <span class="chip">DPM-CNC</span></div></div>
+            </div>
+            <div class="card">
+              <div class="toggle-row"><span class="tg"><i class="on" id="e5-on2"></i><i class="knob" id="e5-k2"></i></span>Listed on GeM</div>
+              <div class="res" id="e5-res2"><div>Buy through GeM <span class="chip">GFR-149</span></div><div class="muted">The GeM buying mode depends on the value.</div></div>
+            </div>
+          </div>
+          <svg class="cursor" id="e5-cursor" viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.6L9.5 21z" fill="#fff" stroke="#1D1D1F" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+      </section>
+
+      <!-- E6 Not covered 90.5–98.5 -->
+      <section id="e6" class="clip scene" data-start="90.5" data-duration="8" data-track-index="0" style="z-index: 11">
+        <div class="stage" id="e6-stage">
+          <div class="head"><div class="eyebrow">Edge case 6 of 7</div><div class="h2">A question it can't answer.</div></div>
+          <div id="e6-chat">
+            <div class="bubble-user" id="e6-q">What is the TA/DA rate for a temporary duty move?</div>
+            <div id="e6-bot">The rule library doesn't cover that, so <b>I won't guess.</b> Ask your unit accounts clerk or the IFA.</div>
+          </div>
+          <div class="card" id="e6-queue">
+            <h3>Review queue</h3>
+            <div id="e6-row">
+              <div class="q">What is the TA/DA rate for a temporary duty move?</div>
+              <div class="s">Not covered · added without your name</div>
+              <div id="e6-pills"><span class="pill warn" id="e6-open">Open</span><span class="pill ok" id="e6-done">Resolved by Rule Custodian</span></div>
+            </div>
+          </div>
+          <div id="e6-cap" class="words">Gaps go to a person, <span class="accent">not a guess.</span></div>
+        </div>
+      </section>
+
+      <!-- E7 Guardrail 98.5–105 -->
+      <section id="e7" class="clip scene" data-start="98.5" data-duration="6.5" data-track-index="0" style="z-index: 12">
+        <div class="stage" id="e7-stage">
+          <div class="head"><div class="eyebrow">Edge case 7 of 7</div><div class="h2">An AI answer with no source.</div></div>
+          <div id="e7-bad">
+            <div class="card">
+              <span class="pill accent">Claude mode</span>
+              <div class="txt">Units can usually buy this directly.<i id="e7-cross"></i></div>
+              <div class="muted" style="font-size:22px;margin-top:12px">No source cited</div>
+              <div id="e7-withheld">Withheld</div>
+            </div>
+          </div>
+          <div id="e7-notice">No source, so Claude's answer was withheld. The rulebook answers instead.</div>
+          <div class="card" id="e7-good">
+            <span class="pill">From the rulebook</span>
+            <div class="row" style="margin-top:14px"><span class="v">Local purchase committee</span><span class="chip">GFR-155</span></div>
+            <div class="row"><span class="v">Commanding Officer</span><span class="chip">DFPDS-LADDER</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ideas 105–111.5 -->
+      <section id="s6" class="clip scene" data-start="105" data-duration="6.5" data-track-index="0" style="z-index: 13">
+        <div class="stage" id="s6-stage">
+          <div class="head"><div class="eyebrow">Where purchases start</div><div class="h2">Ideas from any rank.</div></div>
+          <div class="card" id="id-card">
+            <span class="pill">Welfare · ₹1–2 lakh</span>
+            <div id="id-status"><span class="pill accent" id="id-open">Open</span><span class="pill ok" id="id-acc">Accepted</span></div>
+            <h3>Shade and water point at the firing range</h3>
+            <p>Men wait two to three hours in the sun between details. A shade structure and a cooler would cut heat cases.</p>
+            <div class="meta">Anonymous · JCO / Other Rank</div>
+            <div id="id-actions"><span class="btn" id="id-accept">Accept</span><span class="btn">Defer</span><span class="btn" style="color:var(--danger)">Decline</span></div>
+            <div class="callout info" id="id-co"><b>CO:</b> Accepted. QM to plan the purchase.</div>
+          </div>
+          <div id="id-cap" class="words">The person who raised it <span class="accent">sees the answer.</span></div>
+          <svg class="cursor" id="id-cursor" viewBox="0 0 24 24"><path d="M4 2l16 10-7 1.6L9.5 21z" fill="#fff" stroke="#1D1D1F" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+      </section>
+
+      <!-- Easy + end 111.5–120 -->
+      <section id="s7" class="clip scene" data-start="111.5" data-duration="8.5" data-track-index="0" style="z-index: 14">
+        <div class="stage" id="s7-stage">
+          <div id="ez-title">How easy is it?</div>
+          <div id="ez-steps">
+            <div class="step" id="ez-1"><b>1</b><div>Ask in plain words</div></div>
+            <div class="step" id="ez-2"><b>2</b><div>See the route and who signs</div></div>
+            <div class="step" id="ez-3"><b>3</b><div>Issue the note</div></div>
+          </div>
+          <div id="ez-more" class="words">Runs offline. <span class="accent">Every answer cited.</span></div>
+          <div id="end">
+            <div id="end-word">
+              <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M3 12h26M10 19h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+              <div id="end-name">Kosh</div>
+            </div>
+            <div id="end-line" class="words">Know what you can buy, how, <span class="accent">and who signs.</span></div>
+            <div id="end-foot">Proof of concept · sample rule data · Music: Sascha Ende, ende.app (CC BY 4.0)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Audio ===== -->
+      <audio id="music" data-start="0" data-duration="120" data-track-index="30" data-volume="0.32" data-fade-in="0.8" data-fade-out="2.5" src="assets/music/happy-beats-business-moves-vol-1-by-ende-dot-app.mp3"></audio>
+
+      <!-- typing the question (S3) -->
+      <audio id="k01" data-start="20.00" data-duration="0.25" data-track-index="31" data-volume="0.35" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="k02" data-start="20.25" data-duration="0.25" data-track-index="32" data-volume="0.35" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="k03" data-start="20.50" data-duration="0.25" data-track-index="31" data-volume="0.35" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="k04" data-start="20.75" data-duration="0.25" data-track-index="32" data-volume="0.35" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="k05" data-start="21.00" data-duration="0.25" data-track-index="31" data-volume="0.35" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="k06" data-start="21.25" data-duration="0.25" data-track-index="32" data-volume="0.35" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="k07" data-start="21.50" data-duration="0.25" data-track-index="31" data-volume="0.35" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="k08" data-start="21.75" data-duration="0.25" data-track-index="32" data-volume="0.35" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="c-send" data-start="22.23" data-duration="0.05" data-track-index="33" data-volume="0.7" src="assets/sfx/mouseclick1.ogg"></audio>
+      <!-- answer rows arriving -->
+      <audio id="r1" data-start="23.43" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="r2" data-start="24.33" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="r3" data-start="25.23" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="r4" data-start="26.13" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="r5" data-start="27.03" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="c-chip" data-start="29.78" data-duration="0.05" data-track-index="33" data-volume="0.7" src="assets/sfx/mouseclick1.ogg"></audio>
+      <!-- note -->
+      <audio id="n-drop" data-start="34.63" data-duration="0.19" data-track-index="35" data-volume="0.55" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="n-stamp" data-start="36.43" data-duration="0.57" data-track-index="36" data-volume="0.75" src="assets/sfx/impactSoft_heavy_001.ogg"></audio>
+      <audio id="t1" data-start="38.83" data-duration="0.25" data-track-index="34" data-volume="0.35" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="t2" data-start="39.63" data-duration="0.25" data-track-index="34" data-volume="0.35" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="t3" data-start="40.43" data-duration="0.25" data-track-index="34" data-volume="0.35" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="t4" data-start="41.23" data-duration="0.25" data-track-index="34" data-volume="0.35" src="assets/sfx/keypress-004.wav"></audio>
+      <!-- chapter -->
+      <audio id="ch-hit" data-start="49.33" data-duration="0.13" data-track-index="36" data-volume="0.6" src="assets/sfx/impactSoft_medium_002.ogg"></audio>
+      <!-- E1 -->
+      <audio id="e1-p1" data-start="54.33" data-duration="0.04" data-track-index="37" data-volume="0.35" src="assets/sfx/select_008.ogg"></audio>
+      <audio id="e1-p2" data-start="55.03" data-duration="0.04" data-track-index="37" data-volume="0.35" src="assets/sfx/select_008.ogg"></audio>
+      <!-- E2 -->
+      <audio id="e2-d1" data-start="61.23" data-duration="0.19" data-track-index="35" data-volume="0.5" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="e2-d2" data-start="62.03" data-duration="0.19" data-track-index="35" data-volume="0.5" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="e2-hit" data-start="62.93" data-duration="0.13" data-track-index="36" data-volume="0.6" src="assets/sfx/impactSoft_medium_002.ogg"></audio>
+      <!-- E3 -->
+      <audio id="e3-k1" data-start="68.13" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="e3-k2" data-start="68.48" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="e3-k3" data-start="68.83" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-004.wav"></audio>
+      <audio id="e3-merge" data-start="70.58" data-duration="0.19" data-track-index="35" data-volume="0.55" src="assets/sfx/drop_002.ogg"></audio>
+      <!-- E4 -->
+      <audio id="e4-drop" data-start="78.23" data-duration="0.19" data-track-index="35" data-volume="0.5" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="e4-pop" data-start="79.53" data-duration="0.04" data-track-index="37" data-volume="0.35" src="assets/sfx/select_008.ogg"></audio>
+      <!-- E5 -->
+      <audio id="e5-c1" data-start="85.63" data-duration="0.05" data-track-index="33" data-volume="0.7" src="assets/sfx/mouseclick1.ogg"></audio>
+      <audio id="e5-c2" data-start="87.43" data-duration="0.05" data-track-index="33" data-volume="0.7" src="assets/sfx/mouseclick1.ogg"></audio>
+      <!-- E6 -->
+      <audio id="e6-reply" data-start="92.43" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="e6-drop" data-start="93.93" data-duration="0.19" data-track-index="35" data-volume="0.5" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="e6-pop" data-start="94.83" data-duration="0.04" data-track-index="37" data-volume="0.4" src="assets/sfx/select_008.ogg"></audio>
+      <!-- E7 -->
+      <audio id="e7-hit" data-start="99.93" data-duration="0.13" data-track-index="36" data-volume="0.6" src="assets/sfx/impactSoft_medium_002.ogg"></audio>
+      <audio id="e7-good-k" data-start="101.03" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-004.wav"></audio>
+      <!-- Ideas -->
+      <audio id="id-drop" data-start="105.73" data-duration="0.19" data-track-index="35" data-volume="0.5" src="assets/sfx/drop_002.ogg"></audio>
+      <audio id="id-click" data-start="107.23" data-duration="0.05" data-track-index="33" data-volume="0.7" src="assets/sfx/mouseclick1.ogg"></audio>
+      <!-- Easy -->
+      <audio id="ez-k1" data-start="112.33" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-001.wav"></audio>
+      <audio id="ez-k2" data-start="112.83" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-009.wav"></audio>
+      <audio id="ez-k3" data-start="113.33" data-duration="0.25" data-track-index="34" data-volume="0.3" src="assets/sfx/keypress-004.wav"></audio>
+    </div>
+
+    <script>
+      // Wrap words of .words lines in spans (deterministic, at load, before the timeline is built).
+      document.querySelectorAll(".words").forEach((el) => {
+        const walk = (node) => {
+          [...node.childNodes].forEach((n) => {
+            if (n.nodeType === 3) {
+              const frag = document.createDocumentFragment();
+              n.textContent.split(/(\s+)/).forEach((part) => {
+                if (!part) return;
+                if (/^\s+$/.test(part)) frag.appendChild(document.createTextNode(part));
+                else { const s = document.createElement("span"); s.className = "w"; s.textContent = part; frag.appendChild(s); }
+              });
+              n.replaceWith(frag);
+            } else if (n.nodeType === 1) walk(n);
+          });
+        };
+        walk(el);
+      });
+
+      const tl = gsap.timeline({ paused: true });
+      // Cursor targets (stage coordinates), measured from snapshots.
+      const CUR = { askX: 1110, askY: 650, tg1X: 290, tgY: 400, tg2X: 1070, accX: 300, accY: 660 };
+      const S = { gap: 0, meet: 10.5, ask: 19, note: 34, ch: 49, e1: 52, e2: 60.5, e3: 67.5, e4: 75.5, e5: 84, e6: 90.5, e7: 98.5, ideas: 105, easy: 111.5, end: 120 };
+
+      // Helpers (all fromTo, so every frame is a function of time)
+      const blurIn = (sel, t, d = 0.35) => tl.fromTo(sel, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: d, ease: "power4.out" }, t);
+      const rise = (sel, t, y = 40, d = 0.6) => tl.fromTo(sel, { opacity: 0, y, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: d, ease: "expo.out" }, t);
+      const slideX = (sel, t, x = 80, d = 0.6) => tl.fromTo(sel, { opacity: 0, x, filter: "blur(6px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: d, ease: "expo.out" }, t);
+      const pop = (sel, t) => tl.fromTo(sel, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, t);
+      const words = (sel, t, gap = 0.08) => tl.fromTo(`${sel} .w`, { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, stagger: gap, ease: "power2.out" }, t);
+      const out = (sel, t, d = 0.22) => tl.fromTo(sel, { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: d, ease: "power2.in", immediateRender: false }, t);
+      const stageIn = (id, t) => tl.fromTo(id, { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, t);
+      const stageOut = (id, t) => tl.fromTo(id, { opacity: 1, filter: "blur(0px)" }, { opacity: 0, filter: "blur(8px)", duration: 0.25, ease: "power2.in", immediateRender: false }, t);
+      const click = (sel, t) => tl.fromTo(sel, { scale: 1 }, { scale: 0.86, duration: 0.07, ease: "power2.out", yoyo: true, repeat: 1 }, t);
+
+      // ---------- S1 the gap ----------
+      // Line 1 is on screen from frame 0: it is the thumbnail.
+      words("#gap-l2", S.gap + 2.4, 0.09);
+      out("#gap-lines", S.gap + 5.0, 0.25);
+      tl.fromTo("#gap-l3", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "power4.out" }, S.gap + 5.3);
+      tl.fromTo("#gap-l3", { y: 0 }, { y: -110, duration: 0.7, ease: "power2.inOut" }, S.gap + 7.2);
+      rise("#gap-b1", S.gap + 7.4); rise("#gap-b2", S.gap + 7.7); rise("#gap-b3", S.gap + 8.0);
+      stageOut("#s1-stage", S.meet - 0.3);
+
+      // ---------- S2 meet Kosh ----------
+      stageIn("#s2-stage", S.meet);
+      tl.fromTo("#meet-word svg", { opacity: 0, scale: 0.7, rotate: -8 }, { opacity: 1, scale: 1, rotate: 0, duration: 0.7, ease: "expo.out" }, S.meet + 0.3);
+      tl.fromTo("#meet-name", { opacity: 0, x: -30, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.7, ease: "expo.out" }, S.meet + 0.45);
+      blurIn("#meet-sub", S.meet + 0.95);
+      tl.fromTo("#mark-inner", { opacity: 0 }, { opacity: 1, duration: 0.4 }, S.meet + 6.5);
+      words("#meet-line", S.meet + 2.1, 0.1);
+      blurIn("#meet-roles-label", S.meet + 3.9);
+      tl.fromTo("#meet-roles .role", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.08, ease: "expo.out" }, S.meet + 4.2);
+      stageOut("#s2-stage", S.ask - 0.3);
+
+      // ---------- S3 Ask ----------
+      stageIn("#s3-stage", S.ask);
+      tl.fromTo("#s3 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.ask + 0.1);
+      rise("#ask-win", S.ask + 0.3, 60, 0.8);
+      tl.fromTo("#ask-typed", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 2.0, ease: "steps(34)" }, S.ask + 1.0);
+      click("#ask-send", S.ask + 3.2);
+      tl.fromTo("#ask-typed", { opacity: 1 }, { opacity: 0, duration: 0.12, immediateRender: false }, S.ask + 3.3);
+      tl.fromTo("#ask-q", { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "expo.out" }, S.ask + 3.3);
+      rise("#ask-answer", S.ask + 4.2, 24, 0.5);
+      ["#ask-r1", "#ask-r2", "#ask-r3", "#ask-r4", "#ask-r5"].forEach((r, i) => slideX(r, S.ask + 4.4 + i * 0.9, 30, 0.45));
+      words("#ask-cap", S.ask + 8.9, 0.09);
+      tl.fromTo("#ask-cursor", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.ask + 9.9);
+      tl.fromTo("#ask-cursor", { x: 1380, y: 900 }, { x: CUR.askX, y: CUR.askY, duration: 0.8, ease: "power2.inOut" }, S.ask + 9.9);
+      click("#ask-cursor", S.ask + 10.75);
+      tl.fromTo("#ask-chip", { backgroundColor: "rgba(75,94,42,0.10)" }, { backgroundColor: "rgba(75,94,42,0.22)", duration: 0.15 }, S.ask + 10.75);
+      tl.fromTo("#ask-sheet", { opacity: 0, y: 30, scale: 0.94 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: "expo.out" }, S.ask + 10.9);
+      tl.fromTo("#ask-cursor", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.ask + 11.3);
+      stageOut("#s3-stage", S.note - 0.3);
+
+      // ---------- S4 the note ----------
+      stageIn("#s4-stage", S.note);
+      tl.fromTo("#s4 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.note + 0.1);
+      tl.fromTo("#note-chit", { opacity: 0, y: 160 }, { opacity: 1, y: 0, duration: 0.9, ease: "expo.out" }, S.note + 0.5);
+      tl.fromTo("#note-stamp", { opacity: 0, scale: 1.7, rotate: -7 }, { opacity: 0.9, scale: 1, rotate: -7, duration: 0.3, ease: "back.out(2)" }, S.note + 2.35);
+      tl.fromTo("#note-chit", { x: 0 }, { x: 5, duration: 0.05, yoyo: true, repeat: 1, ease: "power1.inOut" }, S.note + 2.45);
+      slideX("#note-panel", S.note + 3.6, 80, 0.7);
+      tl.fromTo(["#nl1", "#nl2"], { scaleX: 0 }, { scaleX: 1, duration: 0.3, stagger: 0.1, ease: "power2.out" }, S.note + 4.1);
+      [1, 2, 3, 4].forEach((n, i) => {
+        const t = S.note + 4.8 + i * 0.8;
+        tl.fromTo(`#nb${n}`, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(2)" }, t);
+        tl.fromTo(`#nw${n}`, { opacity: 0 }, { opacity: 1, duration: 0.3 }, t + 0.05);
+      });
+      ["#nl3", "#nl4", "#nl5", "#nl6"].forEach((s, i) => tl.fromTo(s, { scaleX: 0 }, { scaleX: 1, duration: 0.35, ease: "power2.out" }, S.note + 8.2 + i * 1.0));
+      words("#note-cap", S.note + 11.9, 0.08);
+      stageOut("#s4-stage", S.ch - 0.3);
+
+      // ---------- S5 chapter ----------
+      stageIn("#s5-stage", S.ch);
+      tl.fromTo("#ch-line", { opacity: 0, x: -60, filter: "blur(12px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, S.ch + 0.3);
+      blurIn("#ch-sub", S.ch + 1.1);
+      stageOut("#s5-stage", S.e1 - 0.3);
+
+      // ---------- E1 above your powers ----------
+      stageIn("#e1-stage", S.e1);
+      tl.fromTo("#e1 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e1 + 0.15);
+      rise("#e1-q", S.e1 + 0.6, 30, 0.5);
+      tl.fromTo("#e1-ladder .rung", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.5, stagger: { each: 0.08, from: "end" }, ease: "expo.out" }, S.e1 + 1.0);
+      tl.set("#e1-marker", { y: 3 * 128 + 23 }, 0);
+      tl.fromTo("#e1-marker", { opacity: 0 }, { opacity: 1, duration: 0.3 }, S.e1 + 1.6);
+      tl.fromTo("#e1-h1", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e1 + 1.6);
+      tl.fromTo("#e1-marker", { y: 3 * 128 + 23 }, { y: 2 * 128 + 23, duration: 0.45, ease: "power3.inOut", immediateRender: false }, S.e1 + 1.9);
+      tl.fromTo("#e1-h1", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.e1 + 2.0);
+      tl.fromTo("#e1-h2", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e1 + 2.25);
+      tl.fromTo("#e1-marker", { y: 2 * 128 + 23 }, { y: 1 * 128 + 23, duration: 0.45, ease: "power3.inOut", immediateRender: false }, S.e1 + 2.6);
+      tl.fromTo("#e1-h2", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.e1 + 2.7);
+      tl.fromTo("#e1-h3", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e1 + 2.95);
+      slideX("#e1-c1", S.e1 + 3.2, -40, 0.5);
+      slideX("#e1-c2", S.e1 + 3.6, -40, 0.5);
+      rise("#e1-warn", S.e1 + 4.0, 24, 0.5);
+      stageOut("#e1-stage", S.e2 - 0.3);
+
+      // ---------- E2 not a local purchase ----------
+      stageIn("#e2-stage", S.e2);
+      tl.fromTo("#e2 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e2 + 0.15);
+      rise("#e2-c1", S.e2 + 0.7, 50); rise("#e2-c2", S.e2 + 1.5, 50);
+      tl.fromTo("#e2-ban", { opacity: 0, scale: 0.97 }, { opacity: 1, scale: 1, duration: 0.35, ease: "expo.out" }, S.e2 + 2.4);
+      rise("#e2-note", S.e2 + 3.4, 20, 0.5);
+      stageOut("#e2-stage", S.e3 - 0.3);
+
+      // ---------- E3 splitting ----------
+      stageIn("#e3-stage", S.e3);
+      tl.fromTo("#e3 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e3 + 0.15);
+      slideX("#e3-s1", S.e3 + 0.6, -60, 0.5); slideX("#e3-s2", S.e3 + 0.95, -60, 0.5); slideX("#e3-s3", S.e3 + 1.3, -60, 0.5);
+      tl.fromTo("#e3-s2", { y: 0 }, { y: -170, duration: 0.55, ease: "power3.inOut" }, S.e3 + 2.6);
+      tl.fromTo("#e3-s3", { y: 0 }, { y: -340, duration: 0.55, ease: "power3.inOut" }, S.e3 + 2.6);
+      tl.fromTo(["#e3-s1", "#e3-s2", "#e3-s3"], { opacity: 1 }, { opacity: 0, duration: 0.15, immediateRender: false }, S.e3 + 3.05);
+      tl.fromTo("#e3-merged", { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.5)" }, S.e3 + 3.05);
+      words("#e3-rule .big", S.e3 + 3.6, 0.08);
+      tl.fromTo("#e3-rule > div:last-child", { opacity: 0 }, { opacity: 1, duration: 0.4 }, S.e3 + 4.1);
+      stageOut("#e3-stage", S.e4 - 0.3);
+
+      // ---------- E4 local order ----------
+      stageIn("#e4-stage", S.e4);
+      tl.fromTo("#e4 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e4 + 0.15);
+      tl.fromTo("#e4-ladder .rung", { opacity: 0, x: 60 }, { opacity: 1, x: 0, duration: 0.5, stagger: { each: 0.08, from: "end" }, ease: "expo.out" }, S.e4 + 0.7);
+      tl.set("#e4-marker", { y: 2 * 128 + 23 }, 0);
+      tl.fromTo("#e4-marker", { opacity: 0 }, { opacity: 1, duration: 0.3 }, S.e4 + 1.4);
+      tl.fromTo("#e4-h1", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e4 + 1.4);
+      slideX("#e4-order", S.e4 + 2.7, 80, 0.6);
+      tl.fromTo("#e4-strike", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, S.e4 + 3.7);
+      tl.fromTo("#e4-new", { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.3, ease: "expo.out" }, S.e4 + 4.0);
+      tl.fromTo("#e4-marker", { y: 2 * 128 + 23 }, { y: 1 * 128 + 23, duration: 0.5, ease: "power3.inOut", immediateRender: false }, S.e4 + 4.8);
+      tl.fromTo("#e4-h1", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.e4 + 4.9);
+      tl.fromTo("#e4-h2", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e4 + 5.15);
+      words("#e4-line", S.e4 + 5.7, 0.08);
+      stageOut("#e4-stage", S.e5 - 0.3);
+
+      // ---------- E5 one maker / GeM ----------
+      stageIn("#e5-stage", S.e5);
+      tl.fromTo("#e5 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e5 + 0.15);
+      rise("#e5-cards", S.e5 + 0.7, 40);
+      tl.fromTo("#e5-cursor", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.e5 + 0.9);
+      tl.fromTo("#e5-cursor", { x: 900, y: 900 }, { x: CUR.tg1X, y: CUR.tgY, duration: 0.6, ease: "power2.inOut" }, S.e5 + 0.9);
+      click("#e5-cursor", S.e5 + 1.6);
+      tl.fromTo("#e5-on1", { opacity: 0 }, { opacity: 1, duration: 0.18 }, S.e5 + 1.62);
+      tl.fromTo("#e5-k1", { x: 0 }, { x: 38, duration: 0.22, ease: "power3.out" }, S.e5 + 1.62);
+      tl.fromTo("#e5-res1", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, S.e5 + 1.9);
+      tl.fromTo("#e5-cursor", { x: CUR.tg1X, y: CUR.tgY }, { x: CUR.tg2X, y: CUR.tgY, duration: 0.6, ease: "power2.inOut", immediateRender: false }, S.e5 + 2.8);
+      click("#e5-cursor", S.e5 + 3.4);
+      tl.fromTo("#e5-on2", { opacity: 0 }, { opacity: 1, duration: 0.18 }, S.e5 + 3.42);
+      tl.fromTo("#e5-k2", { x: 0 }, { x: 38, duration: 0.22, ease: "power3.out" }, S.e5 + 3.42);
+      tl.fromTo("#e5-res2", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, S.e5 + 3.7);
+      tl.fromTo("#e5-cursor", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.e5 + 4.1);
+      stageOut("#e5-stage", S.e6 - 0.3);
+
+      // ---------- E6 not covered ----------
+      stageIn("#e6-stage", S.e6);
+      tl.fromTo("#e6 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e6 + 0.15);
+      tl.fromTo("#e6-q", { opacity: 0, y: 30, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "expo.out" }, S.e6 + 0.7);
+      rise("#e6-bot", S.e6 + 1.9, 24, 0.5);
+      slideX("#e6-queue", S.e6 + 2.9, 80, 0.6);
+      tl.fromTo("#e6-row", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, S.e6 + 3.4);
+      tl.fromTo("#e6-open", { opacity: 1 }, { opacity: 0, duration: 0.15, immediateRender: false }, S.e6 + 4.3);
+      tl.fromTo("#e6-done", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, S.e6 + 4.35);
+      words("#e6-cap", S.e6 + 4.7, 0.08);
+      stageOut("#e6-stage", S.e7 - 0.3);
+
+      // ---------- E7 guardrail ----------
+      stageIn("#e7-stage", S.e7);
+      tl.fromTo("#e7 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.e7 + 0.15);
+      rise("#e7-bad", S.e7 + 0.6, 40);
+      tl.fromTo("#e7-cross", { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power2.out" }, S.e7 + 1.4);
+      tl.fromTo("#e7-withheld", { opacity: 0, scale: 1.6, rotate: -8 }, { opacity: 0.9, scale: 1, rotate: -8, duration: 0.3, ease: "back.out(2)" }, S.e7 + 1.45);
+      blurIn("#e7-notice", S.e7 + 1.9, 0.4);
+      slideX("#e7-good", S.e7 + 2.5, 80, 0.6);
+      stageOut("#e7-stage", S.ideas - 0.3);
+
+      // ---------- Ideas ----------
+      stageIn("#s6-stage", S.ideas);
+      tl.fromTo("#s6 .head", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, S.ideas + 0.15);
+      rise("#id-card", S.ideas + 0.7, 50);
+      tl.fromTo("#id-cursor", { opacity: 0 }, { opacity: 1, duration: 0.2 }, S.ideas + 1.4);
+      tl.fromTo("#id-cursor", { x: 760, y: 1000 }, { x: CUR.accX, y: CUR.accY, duration: 0.7, ease: "power2.inOut" }, S.ideas + 1.4);
+      click("#id-cursor", S.ideas + 2.2);
+      click("#id-accept", S.ideas + 2.2);
+      tl.fromTo("#id-open", { opacity: 1 }, { opacity: 0, duration: 0.15, immediateRender: false }, S.ideas + 2.3);
+      tl.fromTo("#id-acc", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.8)" }, S.ideas + 2.35);
+      tl.fromTo("#id-co", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, S.ideas + 2.5);
+      tl.fromTo("#id-cursor", { opacity: 1 }, { opacity: 0, duration: 0.2, immediateRender: false }, S.ideas + 2.9);
+      words("#id-cap", S.ideas + 3.3, 0.08);
+      stageOut("#s6-stage", S.easy - 0.3);
+
+      // ---------- Easy + end ----------
+      stageIn("#s7-stage", S.easy);
+      tl.fromTo("#ez-title", { opacity: 0, x: -40, filter: "blur(10px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, S.easy + 0.2);
+      rise("#ez-1", S.easy + 0.8); rise("#ez-2", S.easy + 1.3); rise("#ez-3", S.easy + 1.8);
+      words("#ez-more", S.easy + 2.5, 0.09);
+      out(["#ez-title", "#ez-steps", "#ez-more"], S.easy + 4.6, 0.25);
+      tl.fromTo("#mark-inner", { opacity: 1 }, { opacity: 0, duration: 0.3, immediateRender: false }, S.easy + 4.7);
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, S.easy + 4.8);
+      tl.fromTo("#end-word svg", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, S.easy + 5.0);
+      tl.fromTo("#end-name", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power4.out" }, S.easy + 5.1);
+      words("#end-line", S.easy + 5.6, 0.08);
+      blurIn("#end-foot", S.easy + 6.4);
+
+      tl.set({}, {}, S.end);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

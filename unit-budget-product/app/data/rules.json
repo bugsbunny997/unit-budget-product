@@ -1,0 +1,359 @@
+{
+  "libraryVersion": "POC-2026-11-11",
+  "notice": "Sample rule library for a proof of concept. Entries marked Reported come from news and secondary sources; Illustrative entries are placeholders; To verify means the rule number or wording has not been checked against the official text. Nothing here may be used on a real case.",
+  "documents": [
+    {
+      "id": "GFR",
+      "name": "General Financial Rules",
+      "version": "GFR 2017, as amended (thresholds per DoE OM of 05.06.2025, reported)",
+      "issuer": "Ministry of Finance, Department of Expenditure",
+      "job": "The rules of the game for all government money",
+      "status": "reported"
+    },
+    {
+      "id": "DFPDS",
+      "name": "Delegation of Financial Powers to Defence Services",
+      "version": "DFPDS 2021; revision reported June 2026",
+      "issuer": "Ministry of Defence",
+      "job": "Who signs, and up to how much",
+      "status": "illustrative"
+    },
+    {
+      "id": "DPM",
+      "name": "Defence Procurement Manual",
+      "version": "DPM 2025, in force from 1 November 2025 (reported)",
+      "issuer": "Ministry of Defence",
+      "job": "How to actually buy it",
+      "status": "reported"
+    },
+    {
+      "id": "PRACTICE",
+      "name": "Unit practice and other sources",
+      "version": "Sample notes",
+      "issuer": "Equipment tables, scales, accounts procedure",
+      "job": "What the three rulebooks leave out",
+      "status": "illustrative"
+    }
+  ],
+  "params": {
+    "gfrBands": {
+      "status": "reported",
+      "basis": "GFR 2017 Rules 154, 155, 161, 162 as revised by DoE OM dated 05.06.2025 (copy seen via a university circular, not the DoE site)",
+      "effective": "2025-06-05",
+      "noQuotationMax": 200000,
+      "committeeMax": 2500000,
+      "lteMax": 10000000
+    },
+    "sanctionLadder": {
+      "status": "illustrative",
+      "basis": "Placeholder ceilings. Replace with the actual DFPDS Army schedule for the item.",
+      "levels": [
+        { "level": "Commanding Officer", "ceiling": 500000 },
+        { "level": "Brigade Commander", "ceiling": 2500000 },
+        { "level": "GOC Division", "ceiling": 10000000 },
+        { "level": "GOC Corps", "ceiling": 30000000 },
+        { "level": "GOC-in-C Command", "ceiling": 100000000 },
+        { "level": "Army HQ / MoD", "ceiling": null }
+      ]
+    },
+    "ifa": {
+      "status": "illustrative",
+      "basis": "Placeholder. Real DFPDS schedules state per item whether a power is exercised with or without IFA concurrence.",
+      "threshold": 1000000
+    }
+  },
+  "entries": [
+    {
+      "id": "GFR-144",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Rule 144",
+      "title": "Fundamental principles of public buying",
+      "text": "Every authority buying goods for public service is responsible and accountable for bringing efficiency, economy and transparency to the purchase, for fair and equitable treatment of suppliers, and for promoting competition.",
+      "keywords": ["principle", "transparency", "competition", "fair", "accountable", "economy", "efficiency"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-21",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Rule 21",
+      "title": "Standards of financial propriety",
+      "text": "An officer should spend public money with the same care a person of ordinary prudence would spend their own. Expenditure should not be more than the occasion demands, and no authority should sanction expenditure that benefits itself.",
+      "keywords": ["propriety", "prudence", "standards", "wasteful", "benefit", "care"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-149",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Rule 149",
+      "title": "Buy through GeM when the item is listed",
+      "text": "Procurement of goods and services that are available on the Government e-Marketplace (GeM) is to be made through GeM. Check GeM first; the buying mode on GeM depends on the value of the purchase and the GeM rules in force.",
+      "keywords": ["gem", "government", "e-marketplace", "marketplace", "online", "portal", "listed", "mandatory"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-154",
+      "doc": "GFR",
+      "version": "GFR 2017, as revised 05.06.2025",
+      "ref": "Rule 154",
+      "title": "Purchase without quotation",
+      "text": "Goods up to ₹2,00,000 on each occasion may be bought without inviting quotations, on the basis of a certificate by the competent authority that the goods are of the requisite quality and specification and were bought from a reliable supplier at a reasonable price.",
+      "keywords": ["without", "quotation", "small", "certificate", "reasonable", "price", "direct"],
+      "status": "reported",
+      "effective": "2025-06-05",
+      "source": "https://www.iitbhu.ac.in/contents/institute/2025/notification/noti_ipc_380.pdf"
+    },
+    {
+      "id": "GFR-155",
+      "doc": "GFR",
+      "version": "GFR 2017, as revised 05.06.2025",
+      "ref": "Rule 155",
+      "title": "Purchase by a local purchase committee",
+      "text": "Goods costing above ₹2,00,000 and up to ₹25,00,000 on each occasion may be bought on the recommendation of a duly constituted purchase committee of three members. The committee surveys the market to establish a reasonable price, quality and specification, identifies a suitable supplier, and records a joint certificate.",
+      "keywords": ["purchase", "committee", "local", "three", "members", "market", "survey", "joint", "certificate"],
+      "status": "reported",
+      "effective": "2025-06-05",
+      "source": "https://www.iitbhu.ac.in/contents/institute/2025/notification/noti_ipc_380.pdf"
+    },
+    {
+      "id": "GFR-162",
+      "doc": "GFR",
+      "version": "GFR 2017, as revised 05.06.2025",
+      "ref": "Rule 162",
+      "title": "Limited Tender Enquiry",
+      "text": "Limited Tender Enquiry may be adopted when the estimated value of the goods is up to ₹1 crore. Bids are invited from registered or known suppliers; GeM-registered suppliers are prima facie eligible.",
+      "keywords": ["limited", "tender", "enquiry", "lte", "registered", "suppliers", "bids"],
+      "status": "reported",
+      "effective": "2025-06-05",
+      "source": "https://www.iitbhu.ac.in/contents/institute/2025/notification/noti_ipc_380.pdf"
+    },
+    {
+      "id": "GFR-161",
+      "doc": "GFR",
+      "version": "GFR 2017, as revised 05.06.2025",
+      "ref": "Rule 161",
+      "title": "Advertised (open) Tender Enquiry",
+      "text": "Procurement of goods with an estimated value above ₹1 crore is to be made through an advertised tender enquiry, published on the Central Public Procurement Portal and run through e-procurement.",
+      "keywords": ["advertised", "open", "tender", "enquiry", "cppp", "publish", "e-procurement", "crore"],
+      "status": "reported",
+      "effective": "2025-06-05",
+      "source": "https://www.iitbhu.ac.in/contents/institute/2025/notification/noti_ipc_380.pdf"
+    },
+    {
+      "id": "GFR-166",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Rule 166",
+      "title": "Single tender and proprietary items",
+      "text": "Single tender enquiry may be adopted when only one firm makes the required goods (a proprietary item), in a defined emergency, or for standardisation with existing equipment. A proprietary article certificate must be recorded, and the reason documented.",
+      "keywords": ["single", "tender", "proprietary", "pac", "one", "maker", "firm", "emergency", "standardisation"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-157",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Rule 157",
+      "title": "Do not split a demand",
+      "text": "A demand should not be divided into smaller quantities to make piecemeal purchases for the purpose of avoiding the sanction of a higher authority. Related requirements are combined and judged at their total value.",
+      "keywords": ["split", "splitting", "divide", "piecemeal", "smaller", "avoid", "higher", "authority", "combined"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-RUSH",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Ch. 3, expenditure control (rule number to verify)",
+      "title": "Avoid the March rush",
+      "text": "A rush of expenditure in the closing months of the financial year is treated as a breach of financial propriety. Cash management instructions cap the share of the year's budget that may be spent in the last quarter and in March.",
+      "keywords": ["march", "rush", "year", "end", "last", "quarter", "closing", "cash", "management", "cap"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "GFR-SURRENDER",
+      "doc": "GFR",
+      "version": "GFR 2017",
+      "ref": "Ch. 3, savings and surrender (rule number to verify)",
+      "title": "Surrender savings in time",
+      "text": "Savings that cannot be used should be surrendered as soon as they are foreseen, and before the financial year closes, so the money can be used elsewhere. Funds not spent by 31 March lapse and do not carry forward.",
+      "keywords": ["surrender", "savings", "lapse", "unspent", "carry", "forward", "31", "march"],
+      "status": "to-verify",
+      "effective": "2017-04-01"
+    },
+    {
+      "id": "DPM-SCOPE",
+      "doc": "DPM",
+      "version": "DPM 2025",
+      "ref": "Introduction",
+      "title": "Which manual applies to your case",
+      "text": "DPM 2025 governs revenue procurement by the Services from 1 November 2025, replacing DPM 2009. Cases where the RFP was issued on or before 31 October 2025 continue under DPM 2009 as amended; RFPs issued or reissued on or after 1 November 2025 follow DPM 2025. Capital acquisition is outside the DPM.",
+      "keywords": ["dpm", "2025", "2009", "manual", "which", "applies", "november", "rfp", "capital", "revenue"],
+      "status": "reported",
+      "effective": "2025-11-01",
+      "source": "https://www.theweek.in/news/defence/2025/10/23/new-rules-faster-deals-dpm-2025-brings-indias-defence-procurement-process-into-fast-lane.html"
+    },
+    {
+      "id": "DPM-FLOW",
+      "doc": "DPM",
+      "version": "DPM 2025",
+      "ref": "Vol I, procurement procedure (summary, verify)",
+      "title": "The steps of a revenue purchase",
+      "text": "A revenue purchase runs: statement of case with necessity, choice of procurement mode by value, enquiry or RFP, receipt and opening of bids, evaluation and comparative statement, sanction of the competent financial authority, supply order, receipt and inspection, taking on charge, and the bill to the paying authority.",
+      "keywords": ["steps", "process", "procedure", "statement", "case", "rfp", "bids", "supply", "order", "inspection", "bill", "flow"],
+      "status": "to-verify",
+      "effective": "2025-11-01"
+    },
+    {
+      "id": "DPM-TPC",
+      "doc": "DPM",
+      "version": "DPM 2025",
+      "ref": "Vol I, committees (summary, verify)",
+      "title": "Tender Purchase Committee",
+      "text": "For tendered purchases a Tender Purchase Committee examines the bids, prepares the comparative statement and recommends the supplier to the competent financial authority. Its composition depends on the value of the case and the level of the sanctioning authority.",
+      "keywords": ["tpc", "tender", "purchase", "committee", "comparative", "statement", "composition", "recommend"],
+      "status": "to-verify",
+      "effective": "2025-11-01"
+    },
+    {
+      "id": "DPM-CNC",
+      "doc": "DPM",
+      "version": "DPM 2025",
+      "ref": "Vol I, negotiation (summary, verify)",
+      "title": "Contract Negotiation Committee",
+      "text": "Where only one vendor is in the running, such as a proprietary or single tender case, a Contract Negotiation Committee negotiates the price before sanction and records why the price is reasonable.",
+      "keywords": ["cnc", "contract", "negotiation", "committee", "single", "vendor", "proprietary", "price"],
+      "status": "to-verify",
+      "effective": "2025-11-01"
+    },
+    {
+      "id": "DPM-INSPECT",
+      "doc": "DPM",
+      "version": "DPM 2025",
+      "ref": "Vol I, receipt and inspection (summary, verify)",
+      "title": "Receipt, inspection and taking on charge",
+      "text": "Stores are received and inspected against the supply order, normally by a board of officers, then taken on charge in the unit ledger. The inspection note and receipt voucher go with the bill.",
+      "keywords": ["receipt", "inspection", "board", "officers", "charge", "ledger", "voucher", "received"],
+      "status": "to-verify",
+      "effective": "2025-11-01"
+    },
+    {
+      "id": "DFPDS-VERSION",
+      "doc": "DFPDS",
+      "version": "DFPDS 2021",
+      "ref": "Order of 7 September 2021",
+      "title": "What DFPDS is and which version applies",
+      "text": "DFPDS sets, schedule by schedule, which authority may sanction how much for which item, and whether the power is used with or without IFA concurrence. DFPDS 2021 introduced emergency financial powers for field formations below Command level. A revised delegation is reported to have been released in June 2026; confirm which version your formation is applying.",
+      "keywords": ["dfpds", "delegation", "financial", "powers", "version", "2021", "2026", "schedule", "emergency"],
+      "status": "reported",
+      "effective": "2021-09-07",
+      "source": "https://www.businesstoday.in/latest/top-story/story/defence-ministry-delegates-enhanced-financial-powers-to-armed-forces-306130-2021-09-07"
+    },
+    {
+      "id": "DFPDS-LADDER",
+      "doc": "DFPDS",
+      "version": "Illustrative",
+      "ref": "Army schedule (placeholder)",
+      "title": "Who sanctions how much",
+      "text": "Sanction is given by the lowest authority whose delegated ceiling for that schedule item covers the full value of the case. Sample ceilings used in this POC: Commanding Officer up to ₹5 lakh, Brigade Commander up to ₹25 lakh, GOC Division up to ₹1 crore, GOC Corps up to ₹3 crore, GOC-in-C up to ₹10 crore, beyond that Army HQ or MoD. These are placeholders, not DFPDS figures.",
+      "keywords": ["sanction", "cfa", "competent", "financial", "authority", "powers", "ceiling", "commanding", "officer", "co", "brigade", "division", "corps", "command", "who", "signs", "level"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "DFPDS-IFA",
+      "doc": "DFPDS",
+      "version": "Illustrative",
+      "ref": "Army schedule (placeholder)",
+      "title": "When IFA concurrence is needed",
+      "text": "Each DFPDS schedule says whether a power is exercised with or without the concurrence of the Integrated Financial Adviser. This POC uses a single placeholder: concurrence above ₹10 lakh. A sanction given without required concurrence is not valid.",
+      "keywords": ["ifa", "integrated", "financial", "adviser", "advisor", "concurrence", "consult", "finance"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-AUTH",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Equipment tables and scales",
+      "title": "Is the item authorised to the unit?",
+      "text": "Whether a unit may hold an item comes from its equipment tables and authorised scales, not from GFR, DFPDS or DPM. Items not on the scales need a separate special sanction before any purchase is planned.",
+      "keywords": ["authorised", "authorized", "scales", "equipment", "table", "entitled", "hold", "allowed", "special"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-CENTRAL",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Provisioning",
+      "title": "Centrally supplied or bought locally?",
+      "text": "Many items reach units through central provisioning: the unit raises a demand on the depot rather than buying. Local purchase is for items that are locally procurable, or for urgent needs where the depot cannot supply, and usually needs a non-availability certificate.",
+      "keywords": ["central", "centrally", "provisioned", "depot", "demand", "local", "purchase", "non-availability", "nac", "supplied"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-HEADS",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Budget heads",
+      "title": "Budget heads",
+      "text": "Funds reach the unit under budget heads, and every purchase is booked to one. The same item can only be bought from the head it belongs to; money under one head cannot simply be used for another without re-appropriation by the authority that allotted it.",
+      "keywords": ["head", "heads", "code", "budget", "allotment", "re-appropriation", "booked", "grant"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-THREE-NUMBERS",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Fund control",
+      "title": "Allotment, commitment and expenditure",
+      "text": "Allotment is what you were given under a head. Commitment is what you have promised through orders that are not yet paid. Expenditure is what the accounts office has booked. What you can still spend is allotment minus commitment minus expenditure, not allotment minus payments.",
+      "keywords": ["allotment", "commitment", "expenditure", "balance", "money", "funds", "spend", "available", "left"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-CDA",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Payment",
+      "title": "Bills and the paying office",
+      "text": "Bills go to the Controller of Defence Accounts, who checks them before paying. A bill is objected to when the sanction, supply order, receipt or inspection papers are missing or do not agree. Attach the full set the first time.",
+      "keywords": ["bill", "cda", "pcda", "payment", "paying", "accounts", "objection", "objected", "audit", "pay"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-NONPUBLIC",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Public and non-public funds",
+      "title": "Is it public money at all?",
+      "text": "Officers' and JCOs' messes, clubs and unit institutes usually furnish and equip themselves from their own regimental (non-public) funds, which run under their own rules rather than GFR. Before planning a purchase, settle which fund the item belongs to: an office, barrack, cookhouse or training area is public money; a mess, club or institute usually is not.",
+      "keywords": ["mess", "officers", "jco", "club", "institute", "regimental", "non-public", "nonpublic", "public", "fund", "funds", "canteen"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    },
+    {
+      "id": "PRAC-SCOPE",
+      "doc": "PRACTICE",
+      "version": "Sample note",
+      "ref": "Scope of this tool",
+      "title": "What this tool does not cover",
+      "text": "This tool covers revenue purchases from public funds. It does not cover capital acquisition, regimental or other non-public funds, pay and allowances, or works executed by the engineer services.",
+      "keywords": ["regimental", "non-public", "fund", "capital", "pay", "allowances", "works", "mes", "scope", "cover"],
+      "status": "illustrative",
+      "effective": "2026-11-11"
+    }
+  ]
+}

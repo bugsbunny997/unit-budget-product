@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Kosh · demo</title>
+  <script>window.KOSH_STATIC = true;</script>
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a class="skip" href="#view">Skip to content</a>
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Sections">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="6" width="26" height="20" rx="4" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M3 12h26M10 19h6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+        <div>
+          <div class="brand-name">Kosh</div>
+          <div class="brand-sub">Unit budget guide</div>
+        </div>
+      </div>
+      <nav id="nav"></nav>
+    </aside>
+    <div class="scrim" id="scrim" hidden></div>
+    <div class="main">
+      <header class="toolbar">
+        <button class="icon-btn only-compact" id="menuBtn" aria-label="Show sections" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="toolbar-title" id="toolbarTitle"></div>
+        <div class="toolbar-end">
+          <span class="mode-pill" id="modePill"></span>
+          <label class="role-picker">
+            <span class="role-label">Viewing as</span>
+            <select id="rolePicker" aria-label="Viewing as"></select>
+          </label>
+        </div>
+      </header>
+      <div class="sample-banner" role="note">
+        <strong>Proof of concept.</strong> Rule thresholds, sanction ceilings and the item catalogue are sample data. Do not use on a real case.
+      </div>
+      <main id="view" tabindex="-1"></main>
+    </div>
+  </div>
+  <dialog id="sheet" aria-labelledby="sheetTitle"></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" type="module"></script>
+</body>
+</html>

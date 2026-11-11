@@ -1,0 +1,7 @@
+Every year, unit money lapses. Not because nobody needed it, but because nobody was sure what GFR, DFPDS and DPM allow.
+
+Kosh is a proof of concept that answers "can I buy this, how, and who signs?" in plain words, with the rule behind every line. In two minutes: the best case (question → cited answer → numbered purchase note) and seven hard cases: above your powers, not a local purchase, splitting a demand, a stricter formation order, a single maker or GeM listing, a question it can't answer, and an AI answer with no source.
+
+All rule figures shown are sample data.
+
+Music: Sascha Ende, ende.app (CC BY 4.0)
